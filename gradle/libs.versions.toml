@@ -25,6 +25,7 @@ moshi = "1.15.0"
 retrofit = "2.9.0"
 room = "2.6.1"
 sortDependencies = "0.4"
+coreKtx = "1.5.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
@@ -60,3 +61,4 @@ square-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref 
 square-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 square-retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit"}
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
