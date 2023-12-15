@@ -35,26 +35,26 @@ class SimpleEntityReadWriteTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeUserAndReadInList() {
-        placeDao.insertPlace(Place(1, "ok", "ok", "ok", 1, 1, "aaa"))
-        placeDao.insertPlace(Place(2, "ok", "ok", "ok", 1, 1, "aaa"))
+    fun insertPlaceCreatePlace() {
+        Assert.assertEquals(0, placeDao.getPlaces().size)
+
+
+        placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
+        placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
 
         Assert.assertEquals(2, placeDao.getPlaces().size)
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun writeUserAndReadInList2() {
-        placeDao.insertPlace(Place(2, "ok", "ok", "ok", 1, 1, "aaa"))
-        Assert.assertEquals(1, placeDao.getPlaces().size)
-    }
 
     @Test
     @Throws(Exception::class)
-    fun writeUserAndReadInList3() {
-        placeDao.insertPlace(Place(1, "ok", "ok", "ok", 1, 1, "aaa"))
-        placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, 1, "aaa"))
+    fun updatePlace_updatesSamePlace() {
+        Assert.assertEquals(0, placeDao.getPlaces().size)
 
-        Assert.assertEquals("newName", placeDao.getPlaceById(1)!!.name)
+
+        placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
+        placeDao.updatePlace(Place("newName", "ok", "ok", 1, 1, "aaa"))
+
+        Assert.assertEquals("newName", placeDao.getPlaceById(0)!!.name)
     }
 }
