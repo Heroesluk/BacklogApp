@@ -8,6 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import dagger.hilt.android.AndroidEntryPoint
+import template.UI.places.generateEntry
 import template.theme.TemplateTheme
 
 @AndroidEntryPoint
@@ -20,6 +21,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                 ) {
+//                    generateEntry(Place())
+
                     Greeting("Android")
                 }
             }
