@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import template.domain.model.Place
 
 
@@ -13,18 +14,18 @@ import template.domain.model.Place
 interface PlaceDao {
 
     @Query("SELECT * FROM Place")
-    fun getPlaces(): List<Place>
+    fun getPlaces(): Flow<List<Place>>
 
     @Query("SELECT * FROM Place WHERE id = :id")
-    fun getPlaceById(id: Long): Place?
+    suspend fun getPlaceById(id: Long): Place?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertPlace(place: Place): Long
+    suspend fun insertPlace(place: Place): Long
 
     @Update()
-    fun updatePlace(place: Place): Int
+    suspend fun updatePlace(place: Place): Int
 
     @Query("DELETE FROM PLACE WHERE id = :id")
-    fun deletePlace(id: Long)
+    suspend fun deletePlace(id: Long)
 
 }

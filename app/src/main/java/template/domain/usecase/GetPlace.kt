@@ -6,7 +6,7 @@ import template.domain.repository.PlaceRepository
 class GetPlace(
     private val repository: PlaceRepository,
 ) {
-    operator fun invoke(placeId: Long): Place? {
+    suspend operator fun invoke(placeId: Long): Place? {
         return repository.getPlaceById(placeId)
     }
 

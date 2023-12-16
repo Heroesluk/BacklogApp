@@ -5,7 +5,7 @@ import template.domain.repository.PlaceRepository
 
 
 class DeletePlace(private val repository: PlaceRepository) {
-    operator fun invoke(id: Long) {
+    suspend operator fun invoke(id: Long) {
         repository.deletePlace(id)
     }
 

@@ -1,15 +1,16 @@
 package template.domain.repository
 
+import kotlinx.coroutines.flow.Flow
 import template.domain.model.Place
 
 interface PlaceRepository {
 
-    fun getPlaces(): List<Place>
+    fun getPlaces(): Flow<List<Place>>
 
-    fun getPlaceById(id: Long): Place?
+    suspend fun getPlaceById(id: Long): Place?
 
-    fun insertPlace(place: Place): Long
+    suspend fun insertPlace(place: Place): Long
 
-    fun deletePlace(id: Long)
+    suspend fun deletePlace(id: Long)
 
 }

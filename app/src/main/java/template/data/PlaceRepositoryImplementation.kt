@@ -1,5 +1,6 @@
 package template.data
 
+import kotlinx.coroutines.flow.Flow
 import template.domain.model.Place
 import template.domain.repository.PlaceRepository
 
@@ -7,19 +8,19 @@ class PlaceRepositoryImplementation(
     private val dao: PlaceDao,
 ) : PlaceRepository {
 
-    override fun getPlaces(): List<Place> {
+    override fun getPlaces(): Flow<List<Place>> {
         return dao.getPlaces()
     }
 
-    override fun getPlaceById(id: Long): Place? {
+    override suspend fun getPlaceById(id: Long): Place? {
         return dao.getPlaceById(id)
     }
 
-    override fun insertPlace(place: Place): Long {
+    override suspend fun insertPlace(place: Place): Long {
         return dao.insertPlace(place)
     }
 
-    override fun deletePlace(id: Long) {
+    override suspend fun deletePlace(id: Long) {
         dao.deletePlace(id)
     }
 }
