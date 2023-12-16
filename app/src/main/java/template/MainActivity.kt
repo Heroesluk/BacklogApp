@@ -7,11 +7,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import template.UI.places.PlaceScreen
-import template.UI.places.generateEntry
 import template.theme.TemplateTheme
 
 @AndroidEntryPoint
@@ -24,17 +21,10 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                 ) {
-//                    generateEntry(Place())
                     PlaceScreen()
-                    Greeting("Android")
                 }
             }
         }
     }
 
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
 }

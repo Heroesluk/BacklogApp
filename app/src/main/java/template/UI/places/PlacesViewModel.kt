@@ -27,12 +27,6 @@ class PlacesViewModel @Inject constructor(
     private var getPlacesJob: Job? = null
 
     init {
-        viewModelScope.launch {
-            placeUseCases.addPlace(Place("eiffel Tower", "desc", "2022/12/11", 5, 0, "imgid"))
-            placeUseCases.addPlace(Place("Ramen", "desc2", "2022/12/11", 4, 1, "imgid"))
-
-        }
-
         getNotes()
     }
 
@@ -43,7 +37,7 @@ class PlacesViewModel @Inject constructor(
                 places = places,
                 orderBy = SortBy.DEFAULT,
                 orderDirection = SortDirection.ASC,
-                )
+            )
 
         }.launchIn(viewModelScope)
     }

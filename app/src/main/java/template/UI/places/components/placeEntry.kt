@@ -1,4 +1,4 @@
-package template.UI.places
+package template.UI.places.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import template.domain.model.Place
 
 @Composable
-fun generateEntry(entry: Place) {
+fun placeEntry(place: Place) {
     var expanded by remember { mutableStateOf(false) }
     //this feels like affects performance hard so i'll leave it for now
 //    var dict = mapOf(true to 200.dp, false to 100.dp)
@@ -33,7 +33,7 @@ fun generateEntry(entry: Place) {
     ) {
         Column {
             Text(
-                text = entry.name, fontSize = 18.sp,
+                text = place.name, fontSize = 18.sp,
                 style = MaterialTheme.typography.displaySmall,
             )
 //            Text(
@@ -44,13 +44,13 @@ fun generateEntry(entry: Place) {
 //            )
             if (expanded) {
                 Text(
-                    text = entry.description,
+                    text = place.description,
                     fontSize = 8.sp,
                     modifier = Modifier.fillMaxWidth(0.4f),
                 )
             }
-            Text(text = entry.date)
-            Text(text = entry.score.toString())
+            Text(text = place.date)
+            Text(text = place.score.toString())
         }
         Spacer(
             Modifier
