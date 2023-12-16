@@ -1,19 +1,17 @@
 package template.UI.places
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import template.domain.usecase.PlaceUseCases
-import javax.inject.Inject
-import androidx.compose.runtime.State
-import kotlinx.coroutines.Job
-import template.domain.model.Place
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import template.domain.usecase.PlaceUseCases
 import template.domain.util.SortBy
 import template.domain.util.SortDirection
+import javax.inject.Inject
 
 
 @HiltViewModel

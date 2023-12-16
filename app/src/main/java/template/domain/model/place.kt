@@ -1,6 +1,5 @@
 package template.domain.model
 
-import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

@@ -1,6 +1,5 @@
 package template.domain.usecase
 
-import template.domain.model.Place
 import template.domain.repository.PlaceRepository
 
 
