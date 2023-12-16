@@ -11,13 +11,15 @@ class PlaceRepositoryImplementation(
         return dao.getPlaces()
     }
 
-    override  fun getPlaceById(id: Int): Place? {
+    override fun getPlaceById(id: Long): Place? {
         return dao.getPlaceById(id)
     }
-    override  fun insertPlace(place: Place) {
-        dao.insertPlace(place)
+
+    override fun insertPlace(place: Place): Long {
+        return dao.insertPlace(place)
     }
-    override  fun deletePlace(place: Place) {
-        dao.deletePlace(place)
+
+    override fun deletePlace(id: Long) {
+        dao.deletePlace(id)
     }
 }

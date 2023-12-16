@@ -6,10 +6,10 @@ interface PlaceRepository {
 
     fun getPlaces(): List<Place>
 
-    fun getPlaceById(id: Int): Place?
+    fun getPlaceById(id: Long): Place?
 
-    fun insertPlace(place: Place)
+    fun insertPlace(place: Place): Long
 
-    fun deletePlace(place: Place)
+    fun deletePlace(id: Long)
 
 }

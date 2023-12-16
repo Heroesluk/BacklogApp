@@ -16,15 +16,15 @@ interface PlaceDao {
     fun getPlaces(): List<Place>
 
     @Query("SELECT * FROM Place WHERE id = :id")
-    fun getPlaceById(id: Int): Place?
+    fun getPlaceById(id: Long): Place?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertPlace(place: Place)
+    fun insertPlace(place: Place): Long
 
     @Update()
-    fun updatePlace(place: Place)
+    fun updatePlace(place: Place): Int
 
-    @Delete
-    fun deletePlace(place: Place)
+    @Query("DELETE FROM PLACE WHERE id = :id")
+    fun deletePlace(id: Long)
 
 }

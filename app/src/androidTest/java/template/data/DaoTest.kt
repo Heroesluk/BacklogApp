@@ -35,26 +35,42 @@ class SimpleEntityReadWriteTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertPlaceCreatePlace() {
+    fun insertPlace_createPlace() {
+        placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
+        placeDao.insertPlace(Place("new", "ok", "ok", 1, 1, "aaa"))
+
+        Assert.assertEquals(2, placeDao.getPlaces().size)
+
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun deletePlace_deletePlace() {
         Assert.assertEquals(0, placeDao.getPlaces().size)
 
 
-        placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
-        placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
+        val placeId = placeDao.insertPlace(Place("sex", "ok", "ok", 1, 1, "aaa"))
 
-        Assert.assertEquals(2, placeDao.getPlaces().size)
+        placeDao.deletePlace(placeId)
+
+        Assert.assertEquals(0, placeDao.getPlaces().size)
+
     }
 
 
     @Test
     @Throws(Exception::class)
-    fun updatePlace_updatesSamePlace() {
-        Assert.assertEquals(0, placeDao.getPlaces().size)
-
-
+    fun updatePlace_returnOneOnSuccessfulUpdate() {
         placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
-        placeDao.updatePlace(Place("newName", "ok", "ok", 1, 1, "aaa"))
+        val p1 = placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, 1, "aaa"))
+        Assert.assertEquals(p1, 1)
 
-        Assert.assertEquals("newName", placeDao.getPlaceById(0)!!.name)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun updatePlace_returnZeroOnUnsuccessfulUpdate() {
+        val p1 = placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, 1, "aaa"))
+        Assert.assertEquals(p1, 0)
     }
 }
