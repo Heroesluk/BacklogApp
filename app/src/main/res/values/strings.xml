@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">template</string>
+    <string name="add_place">Add place</string>
+    <string name="place_name">place name</string>
 </resources>

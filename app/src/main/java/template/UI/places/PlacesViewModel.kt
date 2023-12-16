@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import template.domain.model.Place
 import template.domain.usecase.PlaceUseCases
 import template.domain.util.SortBy
 import template.domain.util.SortDirection
@@ -25,6 +27,9 @@ class PlacesViewModel @Inject constructor(
     private var getPlacesJob: Job? = null
 
     init {
+        viewModelScope.launch {
+            placeUseCases.addPlace(Place("eiffel Tower", "desc", "2022/12/11", 5, 0, "imgid"))
+        }
         getNotes()
     }
 
