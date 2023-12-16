@@ -80,6 +80,13 @@ dependencies {
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.converter.moshi)
 
+    // navigation
+    implementation(libs.androidx.core.navigation.ui)
+    implementation(libs.androidx.core.navigation.compose)
+    implementation(libs.androidx.core.navigation.fragment)
+    implementation(libs.androidx.core.navigation.hilt)
+
+
     debugImplementation(platform(libs.compose.bom))
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)

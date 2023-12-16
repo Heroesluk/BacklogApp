@@ -17,6 +17,7 @@ kotlinter = "4.0.0"
 ksp = "1.9.0-1.0.13"
 ktlint = "1.0.1"
 ktxCore = "1.12.0"
+navVersion = "2.7.6"
 leakCanary = "2.12"
 lifecycle = "2.6.2"
 material = "1.10.0"
@@ -26,12 +27,19 @@ retrofit = "2.9.0"
 room = "2.6.1"
 sortDependencies = "0.4"
 coreKtx = "1.5.0"
+navHilt = "1.0.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 android-material = { module = "com.google.android.material:material", version.ref = "material" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "ktxCore" }
+androidx-core-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navVersion" }
+androidx-core-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navVersion" }
+androidx-core-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
+androidx-core-navigation-hilt = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "navHilt" }
+
+
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
