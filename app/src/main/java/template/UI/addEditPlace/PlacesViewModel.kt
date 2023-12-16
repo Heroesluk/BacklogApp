@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import template.domain.model.Place
 import template.domain.usecase.PlaceUseCases
 import javax.inject.Inject
 
@@ -52,6 +53,8 @@ class PlacesViewModel @Inject constructor(
 
     fun submitPlace() {
         viewModelScope.launch {
+            placeUseCases.addPlace(Place(name, description, date, score.toInt(), -1, ""))
+
             _eventFlow.emit(UiEvent.SavePlace)
         }
 
