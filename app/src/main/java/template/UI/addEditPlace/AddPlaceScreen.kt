@@ -9,12 +9,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,7 +32,7 @@ import template.UI.places.PlacesViewModel
 @Composable
 fun AddPlaceScreen(
     navController: NavController,
-    viewModel: AddPlaceViewModel = hiltViewModel(),
+    viewModel: NotesViewModel = hiltViewModel(),
 ) {
 
 
@@ -39,24 +43,25 @@ fun AddPlaceScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
 
-//        Text(
-//            text = viewModel.textPlace,
-//            fontWeight = FontWeight.Bold,
-//            style = MaterialTheme.typography.displaySmall
-//        )
+        Text(
+            text = viewModel.mode,
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.displaySmall,
+        )
 
-//        Text(
-//            text = stringResource(id = R.string.place_name),
-//            style = MaterialTheme.typography.bodyLarge
-//        )
-//        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
+        Text(
+            text = stringResource(id = R.string.place_name),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        TextField(
+            value = viewModel.name,
+            onValueChange = { newName -> viewModel.onPlaceNameChange(newName) },
+            textStyle = LocalTextStyle.current.copy(color = Color.White),
+        )
+        Spacer(modifier = Modifier.padding(2.dp))
 
-//        OutlinedTextField(
-//            value = viewModel.placeName,
-//            onValueChange = { username -> viewModel.onPlaceNameChange(username) },
-//            label = { Text("Label") },
-//        )
 //
 //        TextField(
 //            modifier = Modifier.fillMaxWidth(),

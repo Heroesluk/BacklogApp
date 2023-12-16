@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Screen.AddEditScreen.route) {
                         composable(route = Screen.AddEditScreen.route){
-                            PlaceScreen(navController = navController)
+                            AddPlaceScreen(navController = navController)
                         }
 
                         composable(route = Screen.PlacesScreen.route) {
