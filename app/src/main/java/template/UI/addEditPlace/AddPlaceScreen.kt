@@ -11,33 +11,42 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.collectLatest
 import template.R
-import template.UI.addEditPlace.components.Demo_ExposedDropdownMenuBox
-import template.UI.places.PlacesViewModel
+import template.UI.Screen
 
 @Composable
 fun AddPlaceScreen(
     navController: NavController,
-    viewModel: NotesViewModel = hiltViewModel(),
+    viewModel: PlacesViewModel = hiltViewModel(),
 ) {
+
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is PlacesViewModel.UiEvent.SavePlace -> {
+                    navController.navigate(Screen.PlacesScreen.route)
+                }
+            }
+        }
+    }
 
 
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp, 16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -62,84 +71,55 @@ fun AddPlaceScreen(
         )
         Spacer(modifier = Modifier.padding(2.dp))
 
-//
-//        TextField(
-//            modifier = Modifier.fillMaxWidth(),
-//            value = viewModel.placeName,
-//            onValueChange = { viewModel.onPlaceNameChange(it) },
-//            placeholder = { Text(text = "e.g. Eiffel Tower") },
-//
-//            )
-//        Spacer(modifier = Modifier.padding(8.dp))
-//
-//        Text(
-//            text = stringResource(id = R.string.place_description),
-//            style = MaterialTheme.typography.bodyLarge
-//        )
-//        Spacer(modifier = Modifier.padding(2.dp))
-//
-//        TextField(
-//            modifier = Modifier.fillMaxWidth(),
-//            value = viewModel.placeDescription,
-//            onValueChange = { viewModel.onDescriptionChange(it) },
-//        )
-//
-//        Spacer(modifier = Modifier.padding(8.dp))
-//
-//        Text(
-//            text = stringResource(id = R.string.place_location),
-//            style = MaterialTheme.typography.bodyLarge
-//        )
-//
-//        TextField(
-//            modifier = Modifier.fillMaxWidth(),
-//            value = viewModel.placeLocation,
-//            onValueChange = { viewModel.onChangeLocation(it) },
-//        )
-//
-//        Spacer(modifier = Modifier.padding(8.dp))
-//
-//
-//        Text(
-//            text = stringResource(id = R.string.place_score),
-//            style = MaterialTheme.typography.bodyLarge
-//        )
-//
-//        // TD: change it to enum hover stars / smh
-//        TextField(
-//            modifier = Modifier.fillMaxWidth(),
-//            value = viewModel.placeRating,
-//            onValueChange = { viewModel.onRatingChange(it) },
-//        )
-//
-//        Spacer(modifier = Modifier.padding(8.dp))
-//
-//        Text(
-//            text = stringResource(id = R.string.place_visit_date),
-//            style = MaterialTheme.typography.bodyLarge
-//        )
-//
-//        Demo_ExposedDropdownMenuBox { viewModel.placeEventDate = it }
-//
-//
-//        Button(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(vertical = 16.dp)
-//                .height(56.dp),
-//            onClick = {
-//                viewModel.submitPlace()
-//            },
-//            shape = MaterialTheme.shapes.extraLarge
-//        ) {
-//            Text(
-//                text = stringResource(id = R.string.add_new_place),
-//                style = MaterialTheme.typography.bodyLarge
-//            )
-//        }
-//
-//
-//    }
+        Text(
+            text = stringResource(id = R.string.date),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        TextField(
+            value = viewModel.date,
+            onValueChange = { newDate -> viewModel.onDateChange(newDate) },
+            textStyle = LocalTextStyle.current.copy(color = Color.White),
+        )
+        Spacer(modifier = Modifier.padding(2.dp))
 
+        Text(
+            text = stringResource(id = R.string.score),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        TextField(
+            value = viewModel.score,
+            onValueChange = { newScore -> viewModel.onRatingChange(newScore) },
+            textStyle = LocalTextStyle.current.copy(color = Color.White),
+        )
+        Spacer(modifier = Modifier.padding(2.dp))
+
+        Text(
+            text = stringResource(id = R.string.description),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        TextField(
+            value = viewModel.description,
+            onValueChange = { newDescription -> viewModel.onDescriptionChange(newDescription) },
+            textStyle = LocalTextStyle.current.copy(color = Color.White),
+        )
+        Spacer(modifier = Modifier.padding(2.dp))
+
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+                .height(56.dp),
+            onClick = {
+                viewModel.submitPlace()
+            },
+
+            shape = MaterialTheme.shapes.extraLarge,
+        ) {
+            Text(
+                text = viewModel.modeSubmit,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
     }
 }
