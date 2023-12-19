@@ -22,8 +22,8 @@ fun PlaceScreen(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         state.places.map { place ->
-            Log.i("place: ", place.name )
-            placeEntry(place)
+            Log.i("place: ", place.name)
+            placeEntry(place, deleteEntryFunc = { viewModel.deletePlace(it) })
             Spacer(modifier = Modifier.height(8.dp))
 
 

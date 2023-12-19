@@ -25,7 +25,10 @@ import template.R
 import template.domain.model.Place
 
 @Composable
-fun placeEntry(place: Place) {
+fun placeEntry(
+    place: Place,
+    deleteEntryFunc: (Long) -> Unit,
+) {
     var expanded by remember { mutableStateOf(false) }
     //this feels like affects performance hard so i'll leave it for now
 //    var dict = mapOf(true to 200.dp, false to 100.dp)
@@ -38,17 +41,22 @@ fun placeEntry(place: Place) {
             .fillMaxWidth(),
 //            .height(dict.get(expanded)!!)
     ) {
+        Button(
+//                onClick = { navController.navigate(Screen.AddEditScreen.route) },
+            onClick = { deleteEntryFunc(place.id) },
+            shape = MaterialTheme.shapes.extraLarge,
+        ) {
+            Text(
+                text = "chuj2137",
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+
         Column {
             Text(
                 text = place.name, fontSize = 18.sp,
                 style = MaterialTheme.typography.displaySmall,
             )
-//            Text(
-//                text = entry.name,
-//                fontSize = 10.sp,
-//                style = MaterialTheme.typography.bodyLarge,
-//                textDecoration = TextDecoration.Underline,
-//            )
             if (expanded) {
                 Text(
                     text = place.description,
@@ -72,51 +80,29 @@ fun placeEntry(place: Place) {
             )
         }
 
-
-//        Image(
-//            painter = painterResource(entry.imageId),
-//            contentDescription = "Image",
-//            modifier = Modifier.size(80.dp),
-//        )
-
-
     }
 
-//    if (expanded) {
+
 //        Row(modifier = Modifier.fillMaxWidth()) {
 //
-//            Button(
-//                modifier = Modifier
-//                    .padding(vertical = 16.dp)
-//                    .height(56.dp)
-//                    .fillMaxWidth(0.5f),
-////                onClick = { navController.navigate(Screen.AddEditScreen.route) },
-//                onClick = { },
-//                shape = MaterialTheme.shapes.extraLarge,
-//            ) {
-//                Text(
-//                    text = stringResource(id = R.string.editPlace ),
-//                    style = MaterialTheme.typography.bodyLarge,
-//                )
-//            }
 //
-//            Button(
-//                modifier = Modifier
-//                    .padding(vertical = 16.dp)
-//                    .height(56.dp)
-//                    .fillMaxWidth(0.5f),
-//                onClick = { },
-////                onClick = { model.onEvent(PlaceEvent.RemovePlacePlaceEvent) },
-//                shape = MaterialTheme.shapes.extraLarge,
-//            ) {
-//                Text(
-//                    text = stringResource(id = R.string.remove_place),
-//                    style = MaterialTheme.typography.bodyLarge,
-//                )
-//            }
+////            Button(
+////                modifier = Modifier
+////                    .padding(vertical = 16.dp)
+////                    .height(56.dp)
+////                    .fillMaxWidth(0.5f),
+////                onClick = { },
+//////                onClick = { model.onEvent(PlaceEvent.RemovePlacePlaceEvent) },
+////                shape = MaterialTheme.shapes.extraLarge,
+////            ) {
+////                Text(
+////                    text = stringResource(id = R.string.remove_place),
+////                    style = MaterialTheme.typography.bodyLarge,
+////                )
+////            }
 //
 //        }
-//    }
+
 
 
 }
