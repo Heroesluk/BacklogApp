@@ -57,9 +57,8 @@ class PlacesViewModel @Inject constructor(
 
             _eventFlow.emit(UiEvent.SavePlace)
         }
-
-
     }
+
 
     sealed class UiEvent {
         object SavePlace : UiEvent()

@@ -20,11 +20,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+
         setContent {
             TemplateTheme {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                 ) {
+
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Screen.AddEditScreen.route) {
                         composable(route = Screen.AddEditScreen.route){
@@ -32,6 +35,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = Screen.PlacesScreen.route) {
+                            PlaceScreen(navController = navController)
+                        }
+                        composable(route = Screen.SavePhotoScreen.route) {
                             PlaceScreen(navController = navController)
                         }
 

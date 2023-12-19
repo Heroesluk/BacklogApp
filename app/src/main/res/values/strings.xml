@@ -5,4 +5,6 @@
     <string name="description">description</string>
     <string name="date">date</string>
     <string name="score">score</string>
+    <string name="editPlace">Edit place</string>
+    <string name="remove_place">Remove place</string>
 </resources>
