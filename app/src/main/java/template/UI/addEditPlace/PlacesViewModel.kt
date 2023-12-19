@@ -1,13 +1,17 @@
 package template.UI.addEditPlace
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import template.domain.model.Place
 import template.domain.usecase.PlaceUseCases
@@ -30,6 +34,10 @@ class PlacesViewModel @Inject constructor(
     var score by mutableStateOf("")
         private set
 
+    var selectedImageUri by mutableStateOf<Uri?>(null)
+        private set
+
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
@@ -50,10 +58,16 @@ class PlacesViewModel @Inject constructor(
         date = newDate
 
     }
+    fun onPhotoUriChange(newUri: Uri?) {
+        if(newUri!=null){
+            selectedImageUri = newUri
+        }
+    }
 
     fun submitPlace() {
         viewModelScope.launch {
-            placeUseCases.addPlace(Place(name, description, date, score.toInt(), -1, ""))
+            val id = placeUseCases.addPlace(Place(name, description, date, score.toInt(), -1, selectedImageUri.toString()))
+            Log.i("selected id", id.toString())
 
             _eventFlow.emit(UiEvent.SavePlace)
         }

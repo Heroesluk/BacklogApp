@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.converter.moshi)
 
+    implementation(libs.coil.ktx)
+
     // navigation
     implementation(libs.androidx.core.navigation.ui)
     implementation(libs.androidx.core.navigation.compose)

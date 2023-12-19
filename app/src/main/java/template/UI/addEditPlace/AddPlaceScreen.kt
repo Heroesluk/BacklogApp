@@ -1,5 +1,6 @@
 package template.UI.addEditPlace
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -22,16 +27,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.collectLatest
 import template.R
 import template.UI.Screen
+import template.UI.addEditPlace.components.addPhotoToImage
 
 @Composable
 fun AddPlaceScreen(
     navController: NavController,
     viewModel: PlacesViewModel = hiltViewModel(),
 ) {
-
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -57,6 +63,18 @@ fun AddPlaceScreen(
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.displaySmall,
         )
+
+        Text(
+            text = viewModel.selectedImageUri.toString(),
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.displaySmall,
+        )
+
+        AsyncImage(
+            model = viewModel.selectedImageUri,
+            contentDescription = null,
+        )
+
 
         Spacer(modifier = Modifier.padding(2.dp))
 
@@ -121,5 +139,8 @@ fun AddPlaceScreen(
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
+
+        addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it)})
+
     }
 }

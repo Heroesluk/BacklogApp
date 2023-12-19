@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,8 +14,11 @@ import template.UI.addEditPlace.AddPlaceScreen
 import template.UI.places.PlaceScreen
 import template.theme.TemplateTheme
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,9 +37,6 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(route = Screen.PlacesScreen.route) {
-                            PlaceScreen(navController = navController)
-                        }
-                        composable(route = Screen.SavePhotoScreen.route) {
                             PlaceScreen(navController = navController)
                         }
 

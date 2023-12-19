@@ -1,5 +1,6 @@
 package template.UI.places
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -28,7 +29,13 @@ class PlacesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            placeUseCases.addPlace(Place("eiffel Tower", "desc", "2022/12/11", 5, 0, "imgid"))
+            placeUseCases.getPlaces().onEach { places ->
+                places.map { place ->
+                    placeUseCases.deletePlace(place.id)
+
+                }
+            }
+
         }
         getNotes()
     }
@@ -43,7 +50,10 @@ class PlacesViewModel @Inject constructor(
             )
 
         }.launchIn(viewModelScope)
+
+//        Log.i("places: ")
     }
+
 
 }
 

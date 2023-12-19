@@ -1,5 +1,6 @@
 package template.UI.places
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,10 +22,12 @@ fun PlaceScreen(
 
     Column(modifier = Modifier.fillMaxWidth()) {
         state.places.map { place ->
+            Log.i("place: ", place.name )
             placeEntry(place)
+            Spacer(modifier = Modifier.height(8.dp))
+
 
         }
-        Spacer(modifier = Modifier.height(8.dp))
 
     }
 

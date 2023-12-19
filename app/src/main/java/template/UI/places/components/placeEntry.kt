@@ -1,5 +1,6 @@
 package template.UI.places.components
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import template.R
 import template.domain.model.Place
 
@@ -27,9 +29,6 @@ fun placeEntry(place: Place) {
     var expanded by remember { mutableStateOf(false) }
     //this feels like affects performance hard so i'll leave it for now
 //    var dict = mapOf(true to 200.dp, false to 100.dp)
-
-
-
 
     Row(
         modifier = Modifier
@@ -65,6 +64,14 @@ fun placeEntry(place: Place) {
                 .weight(1f)
                 .fillMaxWidth(),
         )
+        // todo: add error handling / less naive validation
+        if (place.imageFileName != "") {
+            AsyncImage(
+                model = Uri.parse(place.imageFileName),
+                contentDescription = null,
+            )
+        }
+
 
 //        Image(
 //            painter = painterResource(entry.imageId),
@@ -75,41 +82,41 @@ fun placeEntry(place: Place) {
 
     }
 
-    if (expanded) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-
-            Button(
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .height(56.dp)
-                    .fillMaxWidth(0.5f),
-//                onClick = { navController.navigate(Screen.AddEditScreen.route) },
-                onClick = { },
-                shape = MaterialTheme.shapes.extraLarge,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.editPlace ),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-
-            Button(
-                modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .height(56.dp)
-                    .fillMaxWidth(0.5f),
-                onClick = { },
-//                onClick = { model.onEvent(PlaceEvent.RemovePlacePlaceEvent) },
-                shape = MaterialTheme.shapes.extraLarge,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.remove_place),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
-
-        }
-    }
+//    if (expanded) {
+//        Row(modifier = Modifier.fillMaxWidth()) {
+//
+//            Button(
+//                modifier = Modifier
+//                    .padding(vertical = 16.dp)
+//                    .height(56.dp)
+//                    .fillMaxWidth(0.5f),
+////                onClick = { navController.navigate(Screen.AddEditScreen.route) },
+//                onClick = { },
+//                shape = MaterialTheme.shapes.extraLarge,
+//            ) {
+//                Text(
+//                    text = stringResource(id = R.string.editPlace ),
+//                    style = MaterialTheme.typography.bodyLarge,
+//                )
+//            }
+//
+//            Button(
+//                modifier = Modifier
+//                    .padding(vertical = 16.dp)
+//                    .height(56.dp)
+//                    .fillMaxWidth(0.5f),
+//                onClick = { },
+////                onClick = { model.onEvent(PlaceEvent.RemovePlacePlaceEvent) },
+//                shape = MaterialTheme.shapes.extraLarge,
+//            ) {
+//                Text(
+//                    text = stringResource(id = R.string.remove_place),
+//                    style = MaterialTheme.typography.bodyLarge,
+//                )
+//            }
+//
+//        }
+//    }
 
 
 }
