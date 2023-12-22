@@ -1,7 +1,9 @@
 package template.UI.places.components
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,31 +34,33 @@ fun placeEntry(
     deleteEntryFunc: (Long) -> Unit,
     editEntryFunc: (Long) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
 
+
+    var expanded by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .clickable {
                 expanded = !expanded;
             }
             .fillMaxWidth(),
-//            .height(dict.get(expanded)!!)
     ) {
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            DropdownMenuItem(
-                onClick = { deleteEntryFunc(place.id) }, text = { Text("Delete") },
-            )
-            DropdownMenuItem(onClick = { editEntryFunc(place.id) }, text = { Text("Edit") })
-
-        }
         Column {
-            Text(
-                text = place.name, fontSize = 18.sp,
-                style = MaterialTheme.typography.displaySmall,
-            )
+            Box {
+                Text(
+                    text = place.name, fontSize = 18.sp,
+                    style = MaterialTheme.typography.displaySmall,
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    DropdownMenuItem(
+                        onClick = { deleteEntryFunc(place.id) }, text = { Text("Delete") },
+                    )
+                    DropdownMenuItem(onClick = { editEntryFunc(place.id) }, text = { Text("Edit") })
+
+                }
+            }
             if (expanded) {
                 Text(
                     text = place.description,
@@ -66,14 +70,17 @@ fun placeEntry(
             }
             Text(text = place.date)
             Text(text = place.score.toString())
+
+
         }
         Spacer(
             Modifier
                 .weight(1f)
                 .fillMaxWidth(),
         )
-        // todo: add error handling / less naive validation
+//        // todo: add error handling / less naive validation
         if (place.imageFileName != "") {
+            Log.i("image name:", place.imageFileName)
             AsyncImage(
                 model = Uri.parse(place.imageFileName),
                 contentDescription = null,
@@ -82,26 +89,7 @@ fun placeEntry(
 
     }
 
-
-//        Row(modifier = Modifier.fillMaxWidth()) {
-//
-//
-////            Button(
-////                modifier = Modifier
-////                    .padding(vertical = 16.dp)
-////                    .height(56.dp)
-////                    .fillMaxWidth(0.5f),
-////                onClick = { },
-//////                onClick = { model.onEvent(PlaceEvent.RemovePlacePlaceEvent) },
-////                shape = MaterialTheme.shapes.extraLarge,
-////            ) {
-////                Text(
-////                    text = stringResource(id = R.string.remove_place),
-////                    style = MaterialTheme.typography.bodyLarge,
-////                )
-////            }
-//
-//        }
+    Spacer(modifier = Modifier.height(8.dp))
 
 
 }

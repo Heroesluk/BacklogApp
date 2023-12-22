@@ -5,5 +5,6 @@ data class PlaceUseCases(
     val deletePlace: DeletePlace,
     val getPlace: GetPlace,
     val getPlaces: GetPlaces,
+    val getPlacesList: GetPlacesList
 )
 

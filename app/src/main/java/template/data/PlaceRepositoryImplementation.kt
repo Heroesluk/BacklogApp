@@ -23,4 +23,8 @@ class PlaceRepositoryImplementation(
     override suspend fun deletePlace(id: Long) {
         dao.deletePlace(id)
     }
+
+    override fun getPlacesList(): List<Place> {
+        return dao.getPlacesList();
+    }
 }
