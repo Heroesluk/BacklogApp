@@ -80,11 +80,15 @@ fun placeEntry(
         )
 //        // todo: add error handling / less naive validation
         if (place.imageFileName != "") {
+
             Log.i("image name:", place.imageFileName)
-            AsyncImage(
-                model = Uri.parse(place.imageFileName),
-                contentDescription = null,
-            )
+            Box(Modifier.height(100.dp)) {
+                AsyncImage(
+                    model = Uri.parse(place.imageFileName),
+                    contentDescription = null,
+                )
+            }
+
         }
 
     }
