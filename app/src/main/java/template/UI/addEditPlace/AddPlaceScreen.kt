@@ -2,6 +2,7 @@ package template.UI.addEditPlace
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -64,16 +65,13 @@ fun AddPlaceScreen(
             style = MaterialTheme.typography.displaySmall,
         )
 
-        Text(
-            text = viewModel.selectedImageUri.toString(),
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.displaySmall,
-        )
+        Box(Modifier.height(100.dp)) {
 
-        AsyncImage(
-            model = viewModel.selectedImageUri,
-            contentDescription = null,
-        )
+            AsyncImage(
+                model = viewModel.selectedImageUri,
+                contentDescription = null,
+            )
+        }
 
 
         Spacer(modifier = Modifier.padding(2.dp))

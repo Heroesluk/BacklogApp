@@ -2,7 +2,9 @@ package template.UI.places.components
 
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +30,7 @@ import coil.compose.AsyncImage
 import template.R
 import template.domain.model.Place
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun placeEntry(
     place: Place,
@@ -37,13 +40,16 @@ fun placeEntry(
 
 
     var expanded by remember { mutableStateOf(false) }
+    var comandPalette by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
-            .clickable {
-                expanded = !expanded;
-            }
+            .combinedClickable(
+                onClick = { expanded = !expanded },
+                onLongClick = { comandPalette = !comandPalette },
+            )
             .fillMaxWidth(),
-    ) {
+    )
+    {
         Column {
             Box {
                 Text(
@@ -51,8 +57,8 @@ fun placeEntry(
                     style = MaterialTheme.typography.displaySmall,
                 )
                 DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
+                    expanded = comandPalette,
+                    onDismissRequest = { comandPalette = false },
                 ) {
                     DropdownMenuItem(
                         onClick = { deleteEntryFunc(place.id) }, text = { Text("Delete") },
