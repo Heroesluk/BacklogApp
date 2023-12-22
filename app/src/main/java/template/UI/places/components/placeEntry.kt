@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,8 +32,6 @@ fun placeEntry(
     deleteEntryFunc: (Long) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    //this feels like affects performance hard so i'll leave it for now
-//    var dict = mapOf(true to 200.dp, false to 100.dp)
 
     Row(
         modifier = Modifier
@@ -41,17 +41,18 @@ fun placeEntry(
             .fillMaxWidth(),
 //            .height(dict.get(expanded)!!)
     ) {
-        Button(
-//                onClick = { navController.navigate(Screen.AddEditScreen.route) },
-            onClick = { deleteEntryFunc(place.id) },
-            shape = MaterialTheme.shapes.extraLarge,
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
         ) {
-            Text(
-                text = "chuj2137",
-                style = MaterialTheme.typography.bodyLarge,
+            DropdownMenuItem(
+                onClick = { deleteEntryFunc(place.id) },
+                text = { Text("Delete") },
             )
-        }
+            // todo: edit function
+            DropdownMenuItem(onClick = { /* Handle refresh! */ }, text = { Text("Edit") })
 
+        }
         Column {
             Text(
                 text = place.name, fontSize = 18.sp,
@@ -102,7 +103,6 @@ fun placeEntry(
 ////            }
 //
 //        }
-
 
 
 }
