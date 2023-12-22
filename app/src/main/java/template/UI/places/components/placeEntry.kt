@@ -30,6 +30,7 @@ import template.domain.model.Place
 fun placeEntry(
     place: Place,
     deleteEntryFunc: (Long) -> Unit,
+    editEntryFunc: (Long) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -46,11 +47,9 @@ fun placeEntry(
             onDismissRequest = { expanded = false },
         ) {
             DropdownMenuItem(
-                onClick = { deleteEntryFunc(place.id) },
-                text = { Text("Delete") },
+                onClick = { deleteEntryFunc(place.id) }, text = { Text("Delete") },
             )
-            // todo: edit function
-            DropdownMenuItem(onClick = { /* Handle refresh! */ }, text = { Text("Edit") })
+            DropdownMenuItem(onClick = { editEntryFunc(place.id) }, text = { Text("Edit") })
 
         }
         Column {

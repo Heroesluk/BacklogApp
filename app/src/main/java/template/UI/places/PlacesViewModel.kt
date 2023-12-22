@@ -50,15 +50,20 @@ class PlacesViewModel @Inject constructor(
             )
 
         }.launchIn(viewModelScope)
-
-//        Log.i("places: ")
     }
 
     fun deletePlace(id: Long){
         viewModelScope.launch {
             placeUseCases.deletePlace(id)
+            Log.i("PlaceViewModel", "Successfully deleted place with id: $id ")
         }
+    }
 
+    fun editPlace(id: Long){
+        viewModelScope.launch {
+            placeUseCases.deletePlace(id)
+            Log.i("PlaceViewModel", "Successfully deleted place with id: $id ")
+        }
     }
 
 
