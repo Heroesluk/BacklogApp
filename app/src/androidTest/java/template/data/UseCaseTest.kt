@@ -32,11 +32,11 @@ class UseCaseTest {
 
         val place = Place("eiffel Tower", "desc", "2022/12/11", 5, 0, "imgid");
         val placeId = placeUseCases.addPlace(place)
-        Assert.assertEquals(1, placeUseCases.getPlaces().toList().size)
+        Assert.assertEquals(1, placeUseCases.getPlaces.invoke().toList().size)
         Assert.assertEquals(placeUseCases.getPlace(placeId)!!.name, place.name)
 
         placeUseCases.deletePlace(placeId)
 
-        Assert.assertEquals(placeUseCases.getPlaces().toList().size, 0)
+        Assert.assertEquals(placeUseCases.getPlaces.invoke().toList().size, 0)
     }
 }

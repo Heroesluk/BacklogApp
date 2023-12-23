@@ -1,13 +1,10 @@
 package template
 
 import android.app.Application
-import android.content.Context
-import androidx.navigation.NavHostController
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import template.data.PlaceDatabase
 import template.data.PlaceRepositoryImplementation
@@ -16,7 +13,6 @@ import template.domain.usecase.AddPlace
 import template.domain.usecase.DeletePlace
 import template.domain.usecase.GetPlace
 import template.domain.usecase.GetPlaces
-import template.domain.usecase.GetPlacesList
 import template.domain.usecase.PlaceUseCases
 import javax.inject.Singleton
 
@@ -49,7 +45,6 @@ object AppModule {
             addPlace = AddPlace(repository),
             getPlace = GetPlace(repository),
             getPlaces = GetPlaces(repository),
-            getPlacesList = GetPlacesList(repository)
         )
     }
 

@@ -6,8 +6,7 @@ import template.domain.model.Place
 interface PlaceRepository {
 
     fun getPlaces(): Flow<List<Place>>
-
-    fun getPlacesList(): List<Place>
+    fun getPlacesSorted(column: String, order: String): Flow<List<Place>>
 
     suspend fun getPlaceById(id: Long): Place?
 

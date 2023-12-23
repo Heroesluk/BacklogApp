@@ -8,11 +8,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import template.domain.util.SortBy
+import template.domain.util.SortDirection
+import template.util.FilterSort
 
 @Composable
-fun sortMenuButton() {
+fun sortMenuButton(
+    sortFun: (SortBy) -> Unit
+) {
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -30,11 +37,9 @@ fun sortMenuButton() {
             onDismissRequest = { expanded = false },
         ) {
             Text("Order by:")
-            DropdownMenuItem(
-                onClick = { }, text = { Text("Score") },
-            )
-            DropdownMenuItem(onClick = { }, text = { Text("Date") })
-
+            DropdownMenuItem(onClick = {sortFun(SortBy.SCORE) }, text = { Text("Score") },)
+            DropdownMenuItem(onClick = { sortFun(SortBy.NAME)}, text = { Text("Name") })
+            DropdownMenuItem(onClick = { sortFun(SortBy.DEFAULT)}, text = { Text("Creation date") })
         }
     }
 }

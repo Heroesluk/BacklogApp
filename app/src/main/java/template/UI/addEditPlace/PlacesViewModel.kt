@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PlacesViewModel @Inject constructor(
     private val placeUseCases: PlaceUseCases,
-) : ViewModel() {
+    savedStateHandle: SavedStateHandle,
+
+    ) : ViewModel() {
 
 
     var mode = "Edit place"
@@ -35,7 +38,7 @@ class PlacesViewModel @Inject constructor(
         private set
 
     var descriptionCharacterLimitMessage by mutableStateOf("0/128")
-    private set
+        private set
     var descriptionCorrect by mutableStateOf(true)
 
     var date by mutableStateOf("")
@@ -60,6 +63,23 @@ class PlacesViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    init {
+        savedStateHandle.get<Long>("placeId")?.let { noteId ->
+
+            if (noteId != -1L) {
+                viewModelScope.launch {
+                    placeUseCases.getPlace(noteId)?.also { note ->
+                        onPlaceNameChange(note.name)
+                        onDateChange(note.date)
+                        onDescriptionChange(note.description)
+                        onScoreSliderChange(note.score.toFloat())
+                        onPhotoUriChange(Uri.parse(note.imageFileName))
+                    }
+                }
+            }
+        }
+    }
+
 
     fun onPlaceNameChange(newName: String) {
         name = newName
@@ -74,7 +94,6 @@ class PlacesViewModel @Inject constructor(
         descriptionCorrect = l <= 128
         descriptionCharacterLimitMessage = "$l/128"
     }
-
 
 
     fun onScoreSliderChange(newScore: Float) {

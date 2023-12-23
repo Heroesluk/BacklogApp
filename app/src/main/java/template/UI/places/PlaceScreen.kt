@@ -41,7 +41,7 @@ fun PlaceScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is PlacesViewModel.UiEvent.EditPlace -> {
-                    navController.navigate(Screen.AddEditScreen.route)
+                    navController.navigate(Screen.AddEditScreen.route + "?placeId=${viewModel.placeToEditId}")
                 }
             }
         }
@@ -53,11 +53,12 @@ fun PlaceScreen(
                 title = {
                     Text("Places you've visited")
                 },
-                actions = {Row(horizontalArrangement = Arrangement.SpaceBetween){
-                    filterMenuButton()
-                    sortMenuButton()
+                actions = {
+                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        filterMenuButton()
+                        sortMenuButton(sortFun = { viewModel.triggerResort(it) })
 
-                }
+                    }
                 },
 
                 )

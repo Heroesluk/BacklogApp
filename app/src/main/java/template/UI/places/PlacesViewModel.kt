@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import template.domain.usecase.PlaceUseCases
 import template.domain.util.SortBy
 import template.domain.util.SortDirection
+import template.util.FilterSort
 import javax.inject.Inject
 
 
@@ -36,30 +37,35 @@ class PlacesViewModel @Inject constructor(
     var placeToEditId by mutableStateOf(-1L)
         private set
 
+
     init {
-        getNotes()
+        val temp = FilterSort(SortBy.NAME, SortDirection.ASC)
+        getPlaces(temp)
     }
 
-    private fun getNotes() {
+    private fun getPlaces(queryArguments: FilterSort) {
         getPlacesJob?.cancel()
 
-        getPlacesJob = placeUseCases.getPlaces().onEach { places ->
+        getPlacesJob = placeUseCases.getPlaces(queryArguments).onEach { places ->
             _state.value = state.value.copy(
                 places = places,
-                orderBy = SortBy.DEFAULT,
-                orderDirection = SortDirection.ASC,
+                sortBy = queryArguments.sortBy,
+                sortDirection = queryArguments.sortDirection,
             )
 
         }.launchIn(viewModelScope)
+    }
 
-//        getPlacesJob = launch {
-//            _state.value = PlaceState(
-//                places = placeUseCases.getPlacesList(),
-//                orderBy = SortBy.DEFAULT,
-//                orderDirection = SortDirection.ASC,
-//            )
-//        }
-
+    fun triggerResort(sortBy: SortBy) {
+        if (state.value.sortBy == sortBy) {
+            if (state.value.sortDirection == SortDirection.ASC) {
+                getPlaces(FilterSort(sortBy, SortDirection.DESC))
+            } else {
+                getPlaces(FilterSort(sortBy, SortDirection.ASC))
+            }
+        } else {
+            getPlaces(FilterSort(sortBy, state.value.sortDirection))
+        }
     }
 
     fun deletePlace(id: Long) {
@@ -72,8 +78,8 @@ class PlacesViewModel @Inject constructor(
     fun editPlace(id: Long) {
         viewModelScope.launch {
             Log.i("PlaceViewModel", "Redirecting to edit place with id: $id ")
-            _eventFlow.emit(UiEvent.EditPlace)
             placeToEditId = id;
+            _eventFlow.emit(UiEvent.EditPlace)
         }
 
     }

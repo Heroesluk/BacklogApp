@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import template.UI.Screen
 import template.UI.addEditPlace.AddPlaceScreen
@@ -32,11 +34,24 @@ class MainActivity : ComponentActivity() {
 
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Screen.PlacesScreen.route) {
-                        composable(route = Screen.AddEditScreen.route){
+                        composable(
+                            route = Screen.AddEditScreen.route + "?placeId={placeId}",
+                            arguments = listOf(
+                                navArgument(
+                                    name = "placeId",
+                                ) {
+                                    type = NavType.LongType
+                                    defaultValue = -1L
+                                },
+                            ),
+
+                            ) {
                             AddPlaceScreen(navController = navController)
                         }
 
-                        composable(route = Screen.PlacesScreen.route) {
+                        composable(
+                            route = Screen.PlacesScreen.route,
+                        ) {
                             PlaceScreen(navController = navController)
                         }
 

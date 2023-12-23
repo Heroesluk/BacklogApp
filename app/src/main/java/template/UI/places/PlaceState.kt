@@ -6,8 +6,8 @@ import template.domain.util.SortDirection
 
 data class PlaceState(
     val places: List<Place> = emptyList(),
-    val orderBy: SortBy = SortBy.DEFAULT,
-    val orderDirection: SortDirection = SortDirection.DESC,
+    val sortBy: SortBy = SortBy.DEFAULT,
+    val sortDirection: SortDirection = SortDirection.DESC,
 
     )
 

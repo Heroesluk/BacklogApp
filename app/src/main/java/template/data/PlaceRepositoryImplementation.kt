@@ -11,6 +11,17 @@ class PlaceRepositoryImplementation(
     override fun getPlaces(): Flow<List<Place>> {
         return dao.getPlaces()
     }
+    override fun getPlacesSorted(column: String, order: String): Flow<List<Place>> {
+        if(column=="score" && order == "ASC"){
+            return dao.getPlacesSortedByScoreASC()
+        }
+        else if(column=="score" && order == "ASC"){
+            return dao.getPlacesSortedByScoreASC()
+
+        }
+        return dao.getPlacesSortedByScoreASC()
+
+    }
 
     override suspend fun getPlaceById(id: Long): Place? {
         return dao.getPlaceById(id)
@@ -24,7 +35,7 @@ class PlaceRepositoryImplementation(
         dao.deletePlace(id)
     }
 
-    override fun getPlacesList(): List<Place> {
-        return dao.getPlacesList();
-    }
+
+
+
 }
