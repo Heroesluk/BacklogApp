@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -24,7 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -80,33 +85,39 @@ fun AddPlaceScreen(
             text = stringResource(id = R.string.place_name),
             style = MaterialTheme.typography.bodyLarge,
         )
-        TextField(
+        OutlinedTextField(
             value = viewModel.name,
             onValueChange = { newName -> viewModel.onPlaceNameChange(newName) },
+            keyboardOptions = KeyboardOptions(autoCorrect = true),
             textStyle = LocalTextStyle.current.copy(color = Color.White),
-        )
+            supportingText = { Text(viewModel.nameCharacterLimitMessage) },
+            isError = !viewModel.nameCorrect,
+
+            )
         Spacer(modifier = Modifier.padding(2.dp))
 
         Text(
             text = stringResource(id = R.string.date),
             style = MaterialTheme.typography.bodyLarge,
         )
-        TextField(
+        OutlinedTextField(
             value = viewModel.date,
             onValueChange = { newDate -> viewModel.onDateChange(newDate) },
             textStyle = LocalTextStyle.current.copy(color = Color.White),
+            isError = !viewModel.dateCorrect,
+            label = { Text("DD/MM/YYYY") },
         )
         Spacer(modifier = Modifier.padding(2.dp))
 
-        Text(
-            text = stringResource(id = R.string.score),
-            style = MaterialTheme.typography.bodyLarge,
+        Text(text = "Score: ")
+        Slider(
+            valueRange = 1f..05f,
+            steps = 3,
+
+            value = viewModel.sliderPosition,
+            onValueChange = { newScore -> viewModel.onScoreSliderChange(newScore) },
         )
-        TextField(
-            value = viewModel.score,
-            onValueChange = { newScore -> viewModel.onRatingChange(newScore) },
-            textStyle = LocalTextStyle.current.copy(color = Color.White),
-        )
+        Text(text = viewModel.sliderPosition.toString())
         Spacer(modifier = Modifier.padding(2.dp))
 
         Text(
@@ -138,7 +149,7 @@ fun AddPlaceScreen(
             )
         }
 
-        addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it)})
+        addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it) })
 
     }
 }

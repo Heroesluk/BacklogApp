@@ -3,6 +3,8 @@ package template.UI.addEditPlace
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import template.domain.model.Place
 import template.domain.usecase.PlaceUseCases
+import template.util.Validator
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,12 +28,26 @@ class PlacesViewModel @Inject constructor(
     var modeSubmit = "Finish editing"
     var name by mutableStateOf("")
         private set
+    var nameCharacterLimitMessage by mutableStateOf("0/25")
+        private set
+    var nameCorrect by mutableStateOf(true)
+        private set
     var description by mutableStateOf("")
         private set
     var date by mutableStateOf("")
         private set
+
+    var sliderPosition by mutableFloatStateOf(0f)
+        private set
+
+
+    var dateCorrect by mutableStateOf(true)
+        private set
+
+
     var score by mutableStateOf("")
         private set
+
 
     var selectedImageUri by mutableStateOf<Uri?>(null)
         private set
@@ -42,18 +59,29 @@ class PlacesViewModel @Inject constructor(
 
     fun onPlaceNameChange(newName: String) {
         name = newName
+        val l = name.length
+        nameCorrect = l <= 25
+        nameCharacterLimitMessage = "$l/25"
     }
 
     fun onDescriptionChange(newDescription: String) {
         description = newDescription
     }
 
-    fun onRatingChange(newScore: String) {
-        score = newScore
+
+
+    fun onScoreSliderChange(newScore: Float) {
+        sliderPosition = newScore
     }
 
     fun onDateChange(newDate: String) {
         date = newDate
+        dateCorrect = Validator.isDateCorrect(date)
+
+        // todo: auto add / to date and move cursor
+//        if (date.length == 2 || date.length == 5) {
+//            date += "/"
+//        }
 
     }
 
@@ -65,7 +93,7 @@ class PlacesViewModel @Inject constructor(
 
     fun submitPlace() {
         viewModelScope.launch {
-            val id = placeUseCases.addPlace(Place(name, description, date, score.toInt(), -1, getUriToString()))
+            val id = placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), -1, getUriToString()))
             Log.i("selected id", id.toString())
 
             _eventFlow.emit(UiEvent.SavePlace)
