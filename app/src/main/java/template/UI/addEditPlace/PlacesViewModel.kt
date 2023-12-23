@@ -26,7 +26,8 @@ class PlacesViewModel @Inject constructor(
     ) : ViewModel() {
 
 
-    var mode = "Edit place"
+    var mode by mutableStateOf("Add place")
+        private set
     var modeSubmit = "Finish editing"
     var name by mutableStateOf("")
         private set
@@ -63,10 +64,13 @@ class PlacesViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    var currentId = -1L
+
     init {
         savedStateHandle.get<Long>("placeId")?.let { noteId ->
 
             if (noteId != -1L) {
+                currentId = noteId
                 viewModelScope.launch {
                     placeUseCases.getPlace(noteId)?.also { note ->
                         onPlaceNameChange(note.name)
@@ -74,8 +78,11 @@ class PlacesViewModel @Inject constructor(
                         onDescriptionChange(note.description)
                         onScoreSliderChange(note.score.toFloat())
                         onPhotoUriChange(Uri.parse(note.imageFileName))
+                        mode = "Edit place"
                     }
                 }
+            } else {
+                mode = "Edit place"
             }
         }
     }
@@ -119,9 +126,10 @@ class PlacesViewModel @Inject constructor(
 
     fun submitPlace() {
         viewModelScope.launch {
-            val id = placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), -1, getUriToString()))
-            Log.i("selected id", id.toString())
-
+            if (mode == "Edit place") {
+                placeUseCases.deletePlace(currentId)
+            }
+            placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), -1, getUriToString()))
             _eventFlow.emit(UiEvent.SavePlace)
         }
     }

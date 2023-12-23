@@ -14,4 +14,6 @@ interface PlaceRepository {
 
     suspend fun deletePlace(id: Long)
 
+    suspend fun updatePlace(place: Place): Int
+
 }

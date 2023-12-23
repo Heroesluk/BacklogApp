@@ -35,7 +35,9 @@ class PlaceRepositoryImplementation(
         dao.deletePlace(id)
     }
 
-
+    override suspend fun updatePlace(place: Place): Int {
+        return dao.updatePlace(place)
+    }
 
 
 }

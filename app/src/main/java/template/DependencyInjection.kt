@@ -45,6 +45,7 @@ object AppModule {
             addPlace = AddPlace(repository),
             getPlace = GetPlace(repository),
             getPlaces = GetPlaces(repository),
+
         )
     }
 

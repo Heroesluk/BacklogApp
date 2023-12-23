@@ -70,14 +70,14 @@ fun AddPlaceScreen(
             style = MaterialTheme.typography.displaySmall,
         )
 
-        Box(Modifier.height(100.dp)) {
-
-            AsyncImage(
-                model = viewModel.selectedImageUri,
-                contentDescription = null,
-            )
+        if(viewModel.selectedImageUri!=null){
+            Box(Modifier.height(100.dp)) {
+                AsyncImage(
+                    model = viewModel.selectedImageUri,
+                    contentDescription = null,
+                )
+            }
         }
-
 
         Spacer(modifier = Modifier.padding(2.dp))
 
