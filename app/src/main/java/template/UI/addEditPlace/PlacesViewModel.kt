@@ -4,7 +4,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -34,6 +33,11 @@ class PlacesViewModel @Inject constructor(
         private set
     var description by mutableStateOf("")
         private set
+
+    var descriptionCharacterLimitMessage by mutableStateOf("0/128")
+    private set
+    var descriptionCorrect by mutableStateOf(true)
+
     var date by mutableStateOf("")
         private set
 
@@ -66,6 +70,9 @@ class PlacesViewModel @Inject constructor(
 
     fun onDescriptionChange(newDescription: String) {
         description = newDescription
+        val l = description.length
+        descriptionCorrect = l <= 128
+        descriptionCharacterLimitMessage = "$l/128"
     }
 
 

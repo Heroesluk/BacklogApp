@@ -127,7 +127,10 @@ fun AddPlaceScreen(
         TextField(
             value = viewModel.description,
             onValueChange = { newDescription -> viewModel.onDescriptionChange(newDescription) },
+            keyboardOptions = KeyboardOptions(autoCorrect = true),
             textStyle = LocalTextStyle.current.copy(color = Color.White),
+            supportingText = { Text(viewModel.descriptionCharacterLimitMessage) },
+            isError = !viewModel.descriptionCorrect,
         )
         Spacer(modifier = Modifier.padding(2.dp))
 
