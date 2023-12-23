@@ -3,32 +3,29 @@ package template.UI.places
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collectLatest
 import template.UI.Screen
+import template.UI.places.components.filterMenuButton
 import template.UI.places.components.placeEntry
+import template.UI.places.components.sortMenuButton
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +35,7 @@ fun PlaceScreen(
     viewModel: PlacesViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.value
+
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -55,10 +53,17 @@ fun PlaceScreen(
                 title = {
                     Text("Places you've visited")
                 },
-            )
+                actions = {Row(horizontalArrangement = Arrangement.SpaceBetween){
+                    filterMenuButton()
+                    sortMenuButton()
+
+                }
+                },
+
+                )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(Screen.AddEditScreen.route) },) {
+            FloatingActionButton(onClick = { navController.navigate(Screen.AddEditScreen.route) }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         },
@@ -80,4 +85,8 @@ fun PlaceScreen(
 
 
 }
+
+
+
+
 
