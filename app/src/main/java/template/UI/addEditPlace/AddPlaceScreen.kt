@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -59,7 +60,8 @@ fun AddPlaceScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp, 16.dp)
+            .fillMaxHeight()
+            .padding(16.dp, 16.dp,16.dp,16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -70,7 +72,7 @@ fun AddPlaceScreen(
             style = MaterialTheme.typography.displaySmall,
         )
 
-        if(viewModel.selectedImageUri!=null){
+        if (viewModel.selectedImageUri != null) {
             Box(Modifier.height(100.dp)) {
                 AsyncImage(
                     model = viewModel.selectedImageUri,
