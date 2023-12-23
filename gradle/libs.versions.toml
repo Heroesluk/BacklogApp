@@ -30,6 +30,9 @@ coreKtx = "1.5.0"
 navHilt = "1.0.0"
 coil = "2.5.0"
 
+maps = "4.3.0"
+
+
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 android-material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -39,6 +42,8 @@ androidx-core-navigation-fragment = { module = "androidx.navigation:navigation-f
 androidx-core-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navVersion" }
 androidx-core-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
 androidx-core-navigation-hilt = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "navHilt" }
+
+google-maps = { module = "com.google.maps.android:maps-compose", version.ref = "maps" }
 
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
@@ -70,8 +75,8 @@ square-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", ver
 square-moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 square-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 square-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-square-retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit"}
+square-retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
-coil-ktx = { module="io.coil-kt:coil-compose", version.ref = "coil" }
+coil-ktx = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 

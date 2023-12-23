@@ -5,6 +5,7 @@ plugins {
     id("com.squareup.sort-dependencies")
     id("kotlin-android")
     id("org.jmailen.kotlinter")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -80,6 +81,9 @@ dependencies {
     implementation(libs.square.moshi.kotlin)
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.converter.moshi)
+    // google maps
+    implementation(libs.google.maps)
+
 
     implementation(libs.coil.ktx)
 
@@ -104,5 +108,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.compose.ui.test.junit)
     androidTestImplementation(libs.hilt.android.testing)
+
+
 
 }

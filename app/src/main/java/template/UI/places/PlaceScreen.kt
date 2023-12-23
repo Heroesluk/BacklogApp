@@ -37,7 +37,8 @@ import template.UI.places.components.sortMenuButton
 fun PlaceScreen(
     navController: NavController,
     viewModel: PlacesViewModel = hiltViewModel(),
-) {
+
+    ) {
     val state = viewModel.state.value
 
 
@@ -73,13 +74,14 @@ fun PlaceScreen(
             }
         },
     ) { innerPadding ->
+        Log.i("padding:", innerPadding.toString())
         LazyColumn(
             modifier = Modifier
-                .padding(innerPadding),
+                .padding(10.dp, innerPadding.calculateTopPadding(), 10.dp, 10.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(state.places) { place ->
-                placeEntry(place, deleteEntryFunc = { viewModel.deletePlace(it) }, editEntryFunc = { viewModel.editPlace(it)})
+                placeEntry(place, deleteEntryFunc = { viewModel.deletePlace(it) }, editEntryFunc = { viewModel.editPlace(it) })
             }
 
         }
