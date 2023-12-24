@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = Screen.DisplayMap.route
                         ) {
-                            mapScreen()
+                            mapScreen(navController = navController)
                         }
 
                     }

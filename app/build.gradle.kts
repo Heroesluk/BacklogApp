@@ -83,6 +83,10 @@ dependencies {
     implementation(libs.square.retrofit.converter.moshi)
     // google maps
     implementation(libs.google.maps)
+    implementation(libs.google.maps.utils)
+    implementation(libs.google.maps.widgets)
+
+
 
 
     implementation(libs.coil.ktx)
