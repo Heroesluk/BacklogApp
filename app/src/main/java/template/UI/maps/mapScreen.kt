@@ -4,23 +4,20 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,11 +27,9 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.collectLatest
 import template.UI.Screen
-import template.UI.addEditPlace.PlacesViewModel
 import template.UI.places.components.filterMenuButton
 import template.UI.places.components.sortMenuButton
 
@@ -50,7 +45,7 @@ fun mapScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is MapViewModel.UiEvent.SubmitLocation -> {
-                    navController.navigate(Screen.AddEditScreen.route + "?locationId=${10}")
+                    navController.navigate(Screen.AddEditScreen.route + "?placeId=${-1}?locationId=${10}")
                 }
             }
         }
@@ -72,9 +67,9 @@ fun mapScreen(
                 },
                 actions = {
                     Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                        filterMenuButton()
-                        sortMenuButton(sortFun = { })
-
+                        IconButton(onClick = {navController.navigate(Screen.PlacesScreen.route)}){
+                            Icon(Icons.Default.List, contentDescription = "Navigate to list")
+                        }
                     }
                 },
 

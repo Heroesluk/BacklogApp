@@ -11,9 +11,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -46,7 +50,7 @@ fun PlaceScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is PlacesViewModel.UiEvent.EditPlace -> {
-                    navController.navigate(Screen.AddEditScreen.route + "?placeId=${viewModel.placeToEditId}")
+                    navController.navigate(Screen.AddEditScreen.route + "?placeId=${viewModel.placeToEditId}?locationId=${-1}")
                 }
             }
         }
@@ -60,6 +64,9 @@ fun PlaceScreen(
                 },
                 actions = {
                     Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        IconButton(onClick = { navController.navigate(Screen.DisplayMap.route) }) {
+                            Icon(Icons.Default.Place, contentDescription = "Go to maps")
+                        }
                         filterMenuButton()
                         sortMenuButton(sortFun = { viewModel.triggerResort(it) })
 

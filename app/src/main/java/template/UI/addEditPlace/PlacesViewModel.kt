@@ -72,7 +72,9 @@ class PlacesViewModel @Inject constructor(
     init {
 
         savedStateHandle.get<Long>("locationId")?.let { newLocationId ->
-            locationId = newLocationId
+            if( newLocationId != -1L){
+                locationId = newLocationId
+            }
         }
 
         savedStateHandle.get<Long>("placeId")?.let { noteId ->
