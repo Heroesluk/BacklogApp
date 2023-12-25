@@ -11,10 +11,14 @@ class Place(
     val description: String,
     val date: String,
     val score: Int,
-    val locationId: Int,
     val imageFileName: String,
+    val latitude: Double,
+    val longtitude: Double,
 ) {
-    constructor(name: String, description: String, date: String, score: Int, locationId: Int, imageFileName: String)
-        : this(0, name, description, date, score, locationId, imageFileName)
+    constructor(name: String, description: String, date: String, score: Int, imageFileName: String, latitude: Double,longtitude: Double)
+        : this(0, name, description, date, score, imageFileName, latitude, longtitude)
+
+    constructor(name: String, description: String, date: String, score: Int, imageFileName: String)
+        : this(0, name, description, date, score, imageFileName, -1.0, -1.0)
 
 }

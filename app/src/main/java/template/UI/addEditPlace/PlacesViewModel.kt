@@ -148,7 +148,7 @@ class PlacesViewModel @Inject constructor(
             if (mode == "Edit place") {
                 placeUseCases.deletePlace(currentId)
             }
-            placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), -1, getUriToString()))
+            placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), getUriToString()))
             _eventFlow.emit(UiEvent.SavePlace)
         }
     }

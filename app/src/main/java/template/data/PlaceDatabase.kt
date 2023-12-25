@@ -14,7 +14,7 @@ abstract class PlaceDatabase: RoomDatabase() {
     abstract val placeDao: PlaceDao
 
     companion object {
-        const val DATABASE_NAME = "places_db"
+        const val DATABASE_NAME = "places_db2"
     }
 
 

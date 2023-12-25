@@ -83,7 +83,7 @@ class SimpleEntityReadWriteTest {
     @Throws(Exception::class)
     fun updatePlace_returnOneOnSuccessfulUpdate() = runTest {
         placeDao.insertPlace(Place("ok", "ok", "ok", 1, 1, "aaa"))
-        val p1 = placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, 1, "aaa"))
+        val p1 = placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, "aaa", -1.0, -1.0))
         Assert.assertEquals(p1, 1)
 
     }
@@ -91,7 +91,7 @@ class SimpleEntityReadWriteTest {
     @Test
     @Throws(Exception::class)
     fun updatePlace_returnZeroOnUnsuccessfulUpdate() = runTest {
-        val p1 = placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, 1, "aaa"))
+        val p1 = placeDao.updatePlace(Place(1, "newName", "ok", "ok", 1, "aaa", -1.0, -1.0))
         Assert.assertEquals(p1, 0)
     }
 }
