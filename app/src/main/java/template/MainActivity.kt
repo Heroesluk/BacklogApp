@@ -51,8 +51,8 @@ class MainActivity : ComponentActivity() {
                                 navArgument(
                                     name = "locationId",
                                 ) {
-                                    type = NavType.LongType
-                                    defaultValue = -1L
+                                    type = NavType.StringType
+                                    defaultValue = "-1"
                                 },
 
                                 ),

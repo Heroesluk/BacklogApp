@@ -41,21 +41,26 @@ fun mapScreen(
 
     ) {
 
+    val cameraPos = LatLng(1.35, 103.87)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(cameraPos, 10f)
+    }
+
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is MapViewModel.UiEvent.SubmitLocation -> {
-                    navController.navigate(Screen.AddEditScreen.route + "?placeId=${-1}?locationId=${10}")
+                    navController.navigate(
+                        Screen.AddEditScreen.route + "?placeId=${-1}?locationId=" +
+                            cameraPos.latitude.toString() + ":" + cameraPos.longitude.toString(),
+                    )
                 }
             }
         }
     }
 
 
-    val cameraPos = LatLng(1.35, 103.87)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(cameraPos, 10f)
-    }
+
 
 
 
@@ -67,7 +72,7 @@ fun mapScreen(
                 },
                 actions = {
                     Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                        IconButton(onClick = {navController.navigate(Screen.PlacesScreen.route)}){
+                        IconButton(onClick = { navController.navigate(Screen.PlacesScreen.route) }) {
                             Icon(Icons.Default.List, contentDescription = "Navigate to list")
                         }
                     }
@@ -76,7 +81,7 @@ fun mapScreen(
                 )
         },
     ) { it ->
-        Log.i("a",it.toString())
+        Log.i("a", it.toString())
 
         Box() {
             GoogleMap(
@@ -123,7 +128,8 @@ fun mapScreen(
                     .padding(0.dp, 0.dp, 0.dp, 35.dp),
             ) {
                 Button(
-                    onClick = { viewModel.onButtonEvent(cameraPos.latitude,cameraPos.longitude)
+                    onClick = {
+                        viewModel.onButtonEvent(cameraPos.latitude, cameraPos.longitude)
                     },
                 ) {
                     Text(viewModel.buttonMsg.value)

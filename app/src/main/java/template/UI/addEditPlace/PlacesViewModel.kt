@@ -3,6 +3,7 @@ package template.UI.addEditPlace
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -60,7 +61,7 @@ class PlacesViewModel @Inject constructor(
     var selectedImageUri by mutableStateOf<Uri?>(null)
         private set
 
-    var locationId by mutableStateOf(-1L)
+    var locationId by mutableDoubleStateOf(2.0)
         private set
 
 
@@ -71,9 +72,10 @@ class PlacesViewModel @Inject constructor(
 
     init {
 
-        savedStateHandle.get<Long>("locationId")?.let { newLocationId ->
-            if( newLocationId != -1L){
-                locationId = newLocationId
+        savedStateHandle.get<String>("locationId")?.let { newLocationId ->
+            if (newLocationId != "-1") {
+                val latLong = newLocationId.split(":")
+                locationId = latLong[0].toDouble()
             }
         }
 
@@ -95,7 +97,6 @@ class PlacesViewModel @Inject constructor(
                 mode = "Edit place"
             }
         }
-
 
 
     }
