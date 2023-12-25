@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.flow.collectLatest
 import template.UI.Screen
 import template.UI.addEditPlace.PlacesViewModel
 import template.UI.places.components.filterMenuButton
@@ -43,6 +45,17 @@ fun mapScreen(
     viewModel: MapViewModel = hiltViewModel(),
 
     ) {
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is MapViewModel.UiEvent.SubmitLocation -> {
+                    navController.navigate(Screen.AddEditScreen.route + "?locationId=${10}")
+                }
+            }
+        }
+    }
+
 
     val cameraPos = LatLng(1.35, 103.87)
     val cameraPositionState = rememberCameraPositionState {
@@ -128,8 +141,3 @@ fun mapScreen(
 
 }
 
-
-data class PlaceLocation(
-    val draggable: Boolean,
-    val markerState: MarkerState,
-)

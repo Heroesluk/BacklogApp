@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = Screen.DisplayMap.route) {
                         composable(
-                            route = Screen.AddEditScreen.route + "?placeId={placeId}",
+                            route = Screen.AddEditScreen.route + "?locationId={locationId}",
                             arguments = listOf(
                                 navArgument(
                                     name = "placeId",
@@ -47,7 +47,15 @@ class MainActivity : ComponentActivity() {
                                     type = NavType.LongType
                                     defaultValue = -1L
                                 },
-                            ),
+
+                                navArgument(
+                                    name = "locationId",
+                                ) {
+                                    type = NavType.LongType
+                                    defaultValue = -1L
+                                },
+
+                                ),
 
                             ) {
                             AddPlaceScreen(navController = navController)

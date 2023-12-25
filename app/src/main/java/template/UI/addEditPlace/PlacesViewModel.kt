@@ -60,6 +60,9 @@ class PlacesViewModel @Inject constructor(
     var selectedImageUri by mutableStateOf<Uri?>(null)
         private set
 
+    var locationId by mutableStateOf(-1L)
+        private set
+
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -67,6 +70,11 @@ class PlacesViewModel @Inject constructor(
     var currentId = -1L
 
     init {
+
+        savedStateHandle.get<Long>("locationId")?.let { newLocationId ->
+            locationId = newLocationId
+        }
+
         savedStateHandle.get<Long>("placeId")?.let { noteId ->
 
             if (noteId != -1L) {
@@ -85,6 +93,9 @@ class PlacesViewModel @Inject constructor(
                 mode = "Edit place"
             }
         }
+
+
+
     }
 
 

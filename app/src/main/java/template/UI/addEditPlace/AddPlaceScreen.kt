@@ -65,6 +65,8 @@ fun AddPlaceScreen(
             style = MaterialTheme.typography.displaySmall,
         )
 
+        Text(text = "LocationId: " + viewModel.locationId.toString())
+
         if (viewModel.selectedImageUri != null) {
             Box(Modifier.height(100.dp)) {
                 AsyncImage(
