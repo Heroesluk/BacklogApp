@@ -26,7 +26,7 @@ class PlacesViewModel @Inject constructor(
     private val placeUseCases: PlaceUseCases,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(PlaceState())
+    private val _state = mutableStateOf(PlaceState(emptyList(), SortBy.SCORE, SortDirection.DESC))
     val state: State<PlaceState> = _state
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -39,8 +39,7 @@ class PlacesViewModel @Inject constructor(
 
 
     init {
-        val temp = FilterSort(SortBy.NAME, SortDirection.ASC)
-        getPlaces(temp)
+        getPlaces(FilterSort(state.value.sortBy, state.value.sortDirection))
     }
 
     private fun getPlaces(queryArguments: FilterSort) {
@@ -66,6 +65,8 @@ class PlacesViewModel @Inject constructor(
         } else {
             getPlaces(FilterSort(sortBy, state.value.sortDirection))
         }
+
+
     }
 
     fun deletePlace(id: Long) {

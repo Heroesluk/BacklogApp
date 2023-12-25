@@ -148,7 +148,11 @@ class PlacesViewModel @Inject constructor(
             if (mode == "Edit place") {
                 placeUseCases.deletePlace(currentId)
             }
-            placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), getUriToString()))
+            if (locationLat != -1.0 && locationLong != -1.0) {
+                placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), getUriToString(), locationLat, locationLong))
+            } else {
+                placeUseCases.addPlace(Place(name, description, date, sliderPosition.toInt(), getUriToString()))
+            }
             _eventFlow.emit(UiEvent.SavePlace)
         }
     }

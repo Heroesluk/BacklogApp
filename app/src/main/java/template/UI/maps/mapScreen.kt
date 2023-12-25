@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.flow.collectLatest
 import template.UI.Screen
@@ -50,18 +51,17 @@ fun mapScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is MapViewModel.UiEvent.SubmitLocation -> {
+                    var long = viewModel.places[0].markerState.position.longitude
+                    var lat = viewModel.places[0].markerState.position.latitude
+
                     navController.navigate(
                         Screen.AddEditScreen.route + "?placeId=${-1}?locationId=" +
-                            cameraPos.latitude.toString() + ":" + cameraPos.longitude.toString(),
+                            lat.toString() + ":" + long.toString()
                     )
                 }
             }
         }
     }
-
-
-
-
 
 
     Scaffold(
@@ -112,7 +112,15 @@ fun mapScreen(
 ////                },
 ////            )
 
+                viewModel.placesState.value.places.forEach { place ->
+                    if (place.latitude != -1.0 && place.longtitude != -1.0) {
+                        Marker(
+                            state = MarkerState(LatLng(place.latitude, place.longtitude)),
+                            draggable = false,
+                        )
+                    }
 
+                }
                 viewModel.places.forEach {
                     Marker(
                         state = it.markerState,
