@@ -61,7 +61,10 @@ class PlacesViewModel @Inject constructor(
     var selectedImageUri by mutableStateOf<Uri?>(null)
         private set
 
-    var locationId by mutableDoubleStateOf(2.0)
+    var locationLat by mutableDoubleStateOf(-1.0)
+        private set
+
+    var locationLong by mutableDoubleStateOf(-1.0)
         private set
 
 
@@ -75,7 +78,9 @@ class PlacesViewModel @Inject constructor(
         savedStateHandle.get<String>("locationId")?.let { newLocationId ->
             if (newLocationId != "-1") {
                 val latLong = newLocationId.split(":")
-                locationId = latLong[0].toDouble()
+                locationLat = latLong[0].toDouble()
+                locationLong = latLong[1].toDouble()
+
             }
         }
 

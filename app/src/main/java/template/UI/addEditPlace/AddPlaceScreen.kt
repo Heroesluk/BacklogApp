@@ -65,7 +65,7 @@ fun AddPlaceScreen(
             style = MaterialTheme.typography.displaySmall,
         )
 
-        Text(text = "LocationId: " + viewModel.locationId.toString())
+        Text(text = "LocationId: " + viewModel.locationLat.toString() + ":" + viewModel.locationLong.toString())
 
         if (viewModel.selectedImageUri != null) {
             Box(Modifier.height(100.dp)) {
