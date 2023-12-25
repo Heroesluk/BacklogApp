@@ -51,12 +51,12 @@ fun mapScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is MapViewModel.UiEvent.SubmitLocation -> {
-                    var long = viewModel.places[0].markerState.position.longitude
-                    var lat = viewModel.places[0].markerState.position.latitude
+                    var long = viewModel.place.value.markerState.position.longitude
+                    var lat = viewModel.place.value.markerState.position.latitude
 
                     navController.navigate(
                         Screen.AddEditScreen.route + "?placeId=${-1}?locationId=" +
-                            lat.toString() + ":" + long.toString()
+                            lat.toString() + ":" + long.toString(),
                     )
                 }
             }
@@ -121,10 +121,10 @@ fun mapScreen(
                     }
 
                 }
-                viewModel.places.forEach {
+                if (viewModel.place.value.draggable) {
                     Marker(
-                        state = it.markerState,
-                        draggable = it.draggable,
+                        state = viewModel.place.value.markerState,
+                        draggable = viewModel.place.value.draggable,
                     )
                 }
             }

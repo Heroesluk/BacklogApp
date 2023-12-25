@@ -30,9 +30,8 @@ class MapViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-    val places = mutableStateListOf<PlaceLocation>()
+    val place = mutableStateOf(PlaceLocation())
 
-    val state = mutableStateOf(false)
     var buttonMsg = mutableStateOf("Add new marker")
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -44,24 +43,19 @@ class MapViewModel @Inject constructor(
 
     init {
         getPlaces(FilterSort(SortBy.SCORE, SortDirection.DESC))
-        places.clear()
+        place.value = PlaceLocation()
     }
 
     fun onButtonEvent(cameraLat: Double, cameraLong: Double) {
-        if (state.value) {
+        if (place.value.draggable) {
             buttonMsg.value = "Add new marker"
             viewModelScope.launch {
                 _eventFlow.emit(UiEvent.SubmitLocation);
             }
         } else {
             buttonMsg.value = "Submit new marker"
-            places.add(PlaceLocation(true, MarkerState(LatLng(cameraLat, cameraLong)), "NewName"))
-
+            place.value = PlaceLocation(true, MarkerState(LatLng(cameraLat, cameraLong)), "NewName")
         }
-
-        state.value = !state.value
-
-
     }
 
     private fun getPlaces(queryArguments: FilterSort) {
@@ -86,7 +80,9 @@ class MapViewModel @Inject constructor(
         val draggable: Boolean,
         val markerState: MarkerState,
         val name: String,
-    )
+    ) {
+        constructor() : this(false, MarkerState(LatLng(0.0, 0.0)), "")
+    }
 
 }
 
