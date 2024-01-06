@@ -7,25 +7,26 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import template.domain.usecase.PlaceUseCases
-import javax.inject.Inject
 import com.hexascribe.vertexai.VertexAI
 import com.hexascribe.vertexai.domain.VertexResult
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
-import io.ktor.http.contentType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import com.google.gson.JsonSerializer
+import template.domain.usecase.PlaceUseCases
+import template.util.Contents
+import template.util.Output
+import template.util.Place
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -54,17 +55,15 @@ class AssistantViewModel @Inject constructor(
             .setMaxTokens(256)
     }
 
-    val body = JSONObject(
-        """{
-  "contents": {
-    "role": "user",
-    "parts": [
-      {
-        "text": "Im going to ask you to write me down a list of places to visit in specific location - town or city. Your response should be formatted in a way: PlaceName - PlaceDescription description should be around 7-20 words. can you suggest me 5 places to visit in Berlin"
-      }
-    ]
-  }
-}""")
+    val places = listOf(
+        Place("Im going to ask you to write me down a list of places to visit in specific location - town or city. Your response should be formatted in a way: PlaceName - PlaceDescription description should be around 7-20 words. can you suggest me 5 places to visit in Berlin")
+    )
+
+    val contents = Contents("user", places)
+    val out = Output(contents)
+
+    val moshi: Moshi = Moshi.Builder().build()
+
 
 
     private
