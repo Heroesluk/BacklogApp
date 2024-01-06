@@ -1,11 +1,14 @@
 package template.UI.maps
 
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.request.ImageRequest
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MarkerState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,9 +44,12 @@ class MapViewModel @Inject constructor(
     private val _placesState = mutableStateOf(PlaceState(emptyList(), SortBy.SCORE, SortDirection.DESC))
     val placesState: State<PlaceState> = _placesState
 
+
     init {
         getPlaces(FilterSort(SortBy.SCORE, SortDirection.DESC))
         place.value = PlaceLocation()
+
+
     }
 
     fun onButtonEvent(cameraLat: Double, cameraLong: Double) {
@@ -63,13 +69,14 @@ class MapViewModel @Inject constructor(
 
         getPlacesJob = placeUseCases.getPlaces(queryArguments).onEach { places ->
             _placesState.value = placesState.value.copy(
-                places = places,
+                places = places.filter { it.longtitude != -1.0 && it.latitude != -1.0 },
                 sortBy = queryArguments.sortBy,
                 sortDirection = queryArguments.sortDirection,
             )
 
         }.launchIn(viewModelScope)
     }
+
 
 
     sealed class UiEvent {
