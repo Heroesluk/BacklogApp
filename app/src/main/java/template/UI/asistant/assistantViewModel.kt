@@ -55,8 +55,6 @@ class AssistantViewModel @Inject constructor(
     }
 
 
-
-
     private
     var _output = MutableStateFlow("")
     val output: StateFlow<String> = _output
@@ -70,8 +68,6 @@ class AssistantViewModel @Inject constructor(
 
         val result = textRequest.execute(prompt)
 
-
-
         handleTextResult(result)
     }
 
@@ -84,6 +80,22 @@ class AssistantViewModel @Inject constructor(
         result
             .onSuccess {
                 _output.value = it
+                try {
+                    val places = it.split(";");
+                    val listOfPlaces = mutableListOf<PlaceGenerated>()
+                    for (place in places) {
+                        var lr = place.split(" - ")
+                        listOfPlaces.add(PlaceGenerated(lr.get(0), lr.get(1)))
+                    }
+                    
+                    Log.i("1", listOfPlaces.toString())
+
+                } catch (exception: Exception) {
+                    Log.i("parsingError", "Couldn't parse response: $it")
+                }
+
+
+
                 println("Text Result Success: $it")
             }
             .onFailure {

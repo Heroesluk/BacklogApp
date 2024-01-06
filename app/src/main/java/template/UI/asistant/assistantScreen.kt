@@ -51,7 +51,6 @@ fun aiAssistantScreen(
                 )
         },
     ) { it ->
-        Log.i("a", it.toString())
         Column(
             modifier = Modifier
                 .padding(10.dp, it.calculateTopPadding(), 10.dp, 10.dp),
