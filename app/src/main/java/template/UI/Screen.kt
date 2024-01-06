@@ -6,5 +6,7 @@ sealed class Screen(val route: String) {
 
     object DisplayMap: Screen("map")
 
+    object AssistantScreen: Screen("assistant")
+
 
 }

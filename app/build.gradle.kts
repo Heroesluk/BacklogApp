@@ -65,6 +65,11 @@ dependencies {
 
     kspAndroidTest(libs.hilt.android.compiler)
 
+    implementation("com.hexascribe:vertexai-kt:1.1.0")
+    implementation("io.ktor:ktor-client-core:2.3.7")
+    implementation("io.ktor:ktor-client-cio:2.3.7")
+    implementation("com.google.code.gson:gson:2.8.5")
+
     implementation(platform(libs.compose.bom))
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.android.material)

@@ -17,6 +17,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import template.UI.Screen
 import template.UI.addEditPlace.AddPlaceScreen
+import template.UI.asistant.aiAssistantScreen
 import template.UI.maps.mapScreen
 import template.UI.places.PlaceScreen
 import template.theme.TemplateTheme
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Screen.DisplayMap.route) {
+                    NavHost(navController = navController, startDestination = Screen.AssistantScreen.route) {
                         composable(
                             route = Screen.AddEditScreen.route + "?placeId={placeId}?locationId={locationId}",
                             arguments = listOf(
@@ -71,6 +72,11 @@ class MainActivity : ComponentActivity() {
                             route = Screen.DisplayMap.route
                         ) {
                             mapScreen(navController = navController)
+                        }
+                        composable(
+                            route = Screen.AssistantScreen.route
+                        ){
+                            aiAssistantScreen(navController = navController)
                         }
 
                     }
