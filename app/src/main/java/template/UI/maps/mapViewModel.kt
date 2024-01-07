@@ -44,7 +44,6 @@ class MapViewModel @Inject constructor(
     private val _placesState = mutableStateOf(PlaceState(emptyList(), SortBy.SCORE, SortDirection.DESC))
     val placesState: State<PlaceState> = _placesState
 
-
     init {
         getPlaces(FilterSort(SortBy.SCORE, SortDirection.DESC))
         place.value = PlaceLocation()
@@ -76,7 +75,6 @@ class MapViewModel @Inject constructor(
 
         }.launchIn(viewModelScope)
     }
-
 
 
     sealed class UiEvent {

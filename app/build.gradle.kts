@@ -6,10 +6,15 @@ plugins {
     id("kotlin-android")
     id("org.jmailen.kotlinter")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
 }
 
 android {
     compileSdk = libs.versions.compileSdk.get().toInt()
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "template.app.id"
@@ -69,6 +74,10 @@ dependencies {
     implementation("io.ktor:ktor-client-core:2.3.7")
     implementation("io.ktor:ktor-client-cio:2.3.7")
     implementation("com.google.code.gson:gson:2.8.5")
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    implementation("com.google.android.libraries.places:places:3.3.0")
+
+
 
     implementation(platform(libs.compose.bom))
     implementation(libs.accompanist.systemuicontroller)
@@ -119,5 +128,16 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
 
 
-
 }
+
+secrets {
+    // Optionally specify a different file name containing your secrets.
+    // The plugin defaults to "local.properties"
+    propertiesFileName = "secrets.properties"
+
+    // Configure which keys should be ignored by the plugin by providing regular expressions.
+    // "sdk.dir" is ignored by default.
+    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
+}
+

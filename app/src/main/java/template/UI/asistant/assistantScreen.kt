@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
@@ -24,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import template.UI.Screen
 import template.UI.addEditPlace.PlacesViewModel
+import template.UI.places.components.placeEntry
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,6 +69,19 @@ fun aiAssistantScreen(
                 Text(text = "click me")
             }
             Text(text = output, style = MaterialTheme.typography.bodySmall)
+
+
+            LazyColumn(
+            ) {
+                items(viewModel.fetchedPlaces){
+                    Row(){
+                        Text(text= it.name!!)
+                        Text(text= it.address!!)
+
+                    }
+                }
+
+            }
 
 
         }

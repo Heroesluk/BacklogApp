@@ -1,12 +1,18 @@
 package template.UI.asistant
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.SearchByTextRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import template.domain.usecase.PlaceUseCases
 import javax.inject.Inject
@@ -26,16 +32,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import com.google.gson.JsonSerializer
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 @HiltViewModel
 class AssistantViewModel @Inject constructor(
     private val placeUseCases: PlaceUseCases,
     savedStateHandle: SavedStateHandle,
+    @ApplicationContext applicationContext: Context,
 
     ) : ViewModel() {
 
-    val client = HttpClient()
+    init {
+        Places.initialize(applicationContext, "AIzaSyAiCWPf_5MTU2VzfVF1PrABKoZ53rZw-88")
+
+    }
+
+
+    var client = Places.createClient(applicationContext)
 
 
     var townInput by mutableStateOf("")
@@ -59,16 +73,28 @@ class AssistantViewModel @Inject constructor(
     var _output = MutableStateFlow("")
     val output: StateFlow<String> = _output
 
+    var fetchedPlaces = mutableStateListOf<Place>()
     fun request() = viewModelScope.launch {
+        var job = false
+
+        val response = client.searchByText(
+            SearchByTextRequest.newInstance(
+                "Eiffel tower",
+                listOf(Place.Field.NAME, Place.Field.ID, Place.Field.ICON_URL, Place.Field.ADDRESS, Place.Field.PHOTO_METADATAS),
+            ),
+        ).addOnSuccessListener {
+            fetchedPlaces.add(it.places.get(0))
+        }
+
+
         val prompt =
             """I'm going to ask you to write me down a list of places to visit in specific location - town or city. Your response should be formatted in a way:
     PlaceName - PlaceDescription end with semicolon, dont use asterix
     description should be around 7-20 words. 
     can you suggest me 5 places to visit in $townInput"""
-
         val result = textRequest.execute(prompt)
-
         handleTextResult(result)
+
     }
 
     fun onTownFieldChange(newTown: String) {
@@ -87,19 +113,17 @@ class AssistantViewModel @Inject constructor(
                         var lr = place.split(" - ")
                         listOfPlaces.add(PlaceGenerated(lr.get(0), lr.get(1)))
                     }
-                    
+
                     Log.i("1", listOfPlaces.toString())
 
                 } catch (exception: Exception) {
                     Log.i("parsingError", "Couldn't parse response: $it")
                 }
 
-
-
-                println("Text Result Success: $it")
+                Log.i("Text Result Success:", it)
             }
             .onFailure {
-                println("Text Result Failure: " + it.message)
+                Log.i("Text Result Failure: ", it.message.toString())
             }
     }
 
