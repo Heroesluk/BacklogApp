@@ -1,6 +1,7 @@
 package template.UI.asistant
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.SearchByTextRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import template.domain.usecase.PlaceUseCases
@@ -48,7 +50,6 @@ class AssistantViewModel @Inject constructor(
 
     }
 
-
     var client = Places.createClient(applicationContext)
 
 
@@ -74,6 +75,7 @@ class AssistantViewModel @Inject constructor(
     val output: StateFlow<String> = _output
 
     var fetchedPlaces = mutableStateListOf<Place>()
+    var fetchedImages = mutableStateListOf<Bitmap>()
     fun request() = viewModelScope.launch {
         var job = false
 
@@ -84,8 +86,9 @@ class AssistantViewModel @Inject constructor(
             ),
         ).addOnSuccessListener {
             fetchedPlaces.add(it.places.get(0))
+            fetchImage(it.places.get(0))
+            Log.i("Fetched data: ", it.places.get(0).photoMetadatas!!.toString())
         }
-
 
         val prompt =
             """I'm going to ask you to write me down a list of places to visit in specific location - town or city. Your response should be formatted in a way:
@@ -94,8 +97,29 @@ class AssistantViewModel @Inject constructor(
     can you suggest me 5 places to visit in $townInput"""
         val result = textRequest.execute(prompt)
         handleTextResult(result)
-
     }
+
+    private fun fetchImage(place: Place) {
+        val metada = place.photoMetadatas
+        if (metada == null || metada.isEmpty()) {
+            Log.w("TAG", "No photo metadata.")
+        }
+        val photoMetadata = metada.first()
+
+        val attributions = photoMetadata?.attributions
+        var foto = null
+        val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+            .setMaxWidth(500) // Optional.
+            .setMaxHeight(300) // Optional.
+            .build()
+        client.fetchPhoto(photoRequest)
+            .addOnSuccessListener { it ->
+                fetchedImages.add(it.bitmap)
+            }.addOnFailureListener { exception: Exception ->
+                Log.i("Error", exception.toString())
+            }
+    }
+
 
     fun onTownFieldChange(newTown: String) {
         townInput = newTown
