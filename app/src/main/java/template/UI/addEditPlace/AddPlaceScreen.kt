@@ -69,22 +69,22 @@ fun AddPlaceScreen(
         )
 
         Text(text = "LocationId: " + viewModel.locationLat.toString() + ":" + viewModel.locationLong.toString())
-        Box(Modifier.height(100.dp)) {
-            AsyncImage(
-                model = { viewModel.selectedImageUri },
-                contentDescription = null,
+
+        if (viewModel.selectedImageUri != null) {
+            viewModel.img.value = null;
+
+            Box(Modifier.height(100.dp)) {
+                AsyncImage(
+                    model = viewModel.selectedImageUri,
+                    contentDescription = null,
+                )
+            }
+        } else if (viewModel.img.value != null) {
+            Image(
+                bitmap = viewModel.img.value!!.asImageBitmap(),
+                contentDescription = "some useful description",
             )
         }
-
-//        if (viewModel.selectedImageUri != null) {
-//            viewModel.img.value = null;
-//
-//        } else if (viewModel.img.value != null) {
-//            Image(
-//                bitmap = viewModel.img.value!!.asImageBitmap(),
-//                contentDescription = "some useful description",
-//            )
-//        }
 
 
         Spacer(modifier = Modifier.padding(2.dp))
@@ -158,12 +158,14 @@ fun AddPlaceScreen(
             )
         }
 
-        Row(horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
 
-//            Button(onClick = { viewModel.requestPlaceApi() }) {
-//                Text(text = "Add photo from internet")
-//            }
+            Button(onClick = { viewModel.requestPlaceApi() }) {
+                Text(text = "Add photo from internet")
+            }
             addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it) })
         }
 
