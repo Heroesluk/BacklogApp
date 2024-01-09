@@ -23,6 +23,9 @@ import kotlinx.coroutines.launch
 import template.domain.model.Place
 import template.domain.usecase.PlaceUseCases
 import template.util.Validator
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,6 +62,7 @@ class PlacesViewModel @Inject constructor(
     }
 
     private fun fetchImage(place: com.google.android.libraries.places.api.model.Place) {
+
         val metada = place.photoMetadatas
         if (metada == null || metada.isEmpty()) {
             Log.w("TAG", "No photo metadata.")
@@ -76,13 +80,17 @@ class PlacesViewModel @Inject constructor(
                 .build()
             client.fetchPhoto(photoRequest)
                 .addOnSuccessListener { it ->
-                    img.value = it.bitmap
+//                    img.value = it.bitmap
+                    var uriNew = saveImageToLocal(it.bitmap)
+                    Log.i("fetched uri:", uriNew.toString())
+                    onPhotoUriChange(uriNew)
+
                 }.addOnFailureListener { exception: Exception ->
                     Log.i("Error", exception.toString())
                 }
         }
 
-        imgIndex+=1
+        imgIndex += 1
 
     }
 
@@ -198,9 +206,8 @@ class PlacesViewModel @Inject constructor(
     }
 
     fun onPhotoUriChange(newUri: Uri?) {
-        if (newUri != null) {
-            selectedImageUri = newUri
-        }
+        selectedImageUri = newUri
+
     }
 
     fun submitPlace() {
@@ -227,6 +234,22 @@ class PlacesViewModel @Inject constructor(
             return ""
         }
         return selectedImageUri.toString()
+
+    }
+
+    fun saveImageToLocal(data: Bitmap): Uri? {
+        val tempFile = File.createTempFile(name, ".png")
+        val bytes = ByteArrayOutputStream()
+        data.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+        val bitmapData = bytes.toByteArray()
+
+        val fileOutPut = FileOutputStream(tempFile)
+        fileOutPut.write(bitmapData)
+        fileOutPut.flush()
+        fileOutPut.close()
+
+
+        return Uri.fromFile(tempFile)
 
     }
 

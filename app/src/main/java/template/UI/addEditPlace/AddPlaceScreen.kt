@@ -79,7 +79,8 @@ fun AddPlaceScreen(
                     contentDescription = null,
                 )
             }
-        } else if (viewModel.img.value != null) {
+        }
+        if (viewModel.img.value != null) {
             Image(
                 bitmap = viewModel.img.value!!.asImageBitmap(),
                 contentDescription = "some useful description",

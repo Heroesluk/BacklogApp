@@ -45,8 +45,10 @@ class AssistantViewModel @Inject constructor(
 
     ) : ViewModel() {
 
+
+        val api = "AIzaSyAiCWPf_5MTU2VzfVF1PrABKoZ53rZw-88"
     init {
-        Places.initialize(applicationContext, "AIzaSyAiCWPf_5MTU2VzfVF1PrABKoZ53rZw-88")
+            Places.initialize(applicationContext, api)
 
     }
 
@@ -61,7 +63,7 @@ class AssistantViewModel @Inject constructor(
 
     val vertexAI by lazy {
         VertexAI.Builder()
-            .setAccessToken("ya29.a0AfB_byC0IlFarkZlxCDSp8bScQq1BUotSMND3RNKOgmA6opOK6IRpNRaemYRIL602YPoLk4UvV-VBebJDNnvMNBXrkxaS4UYRqZ-5rKMv90RdYEwHkFTE0mRr-TMT2ybGwQrqa0MFFxSB2ZfkRzZPL96sTGbwAdqGAKzRAaCgYKAYMSARESFQHGX2Mi3v-PvduVhWAAYtqLEd_9ZA0173")
+            .setAccessToken("ya29.a0AfB_byAVAMAsOxPuiM8Bw70yr7B05M--28MOKIOQ4pcFqqlVLxckS6RfqFkmdwwZlNC-ll_1Bvftym8BFRuKZMdBLIJtpv4wnAwdrsIoGm256Z5Nv5tJpIxYChptQmipeyJ4x0LKKNoHiqLf7jy8b015qxe4ckNfnBQCxwaCgYKAekSARESFQHGX2MiN6Wn2_Ycz7Cf4A0fzKrpTA0173")
             .setProjectId("ageless-webbing-405115")
             .build()
     }
@@ -94,6 +96,8 @@ class AssistantViewModel @Inject constructor(
                 fetchedPlaces.add(resp.places.get(0))
                 fetchImage(resp.places.get(0))
                 Log.i("Fetched data: ", resp.places.get(0).photoMetadatas!!.toString())
+
+
             }
 
         }
@@ -128,10 +132,25 @@ class AssistantViewModel @Inject constructor(
 
         val attributions = photoMetadata?.attributions
         var foto = null
+
+        var data =photoMetadata.toString().split(",").toString()
+        val regex = Regex("photoReference=([^,]+)")
+        val matchResult = regex.find(data)
+
+        if (matchResult != null) {
+            val photoReference = matchResult.groupValues[1]
+            val imglink = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&sensor=false&key=$api"
+            Log.i("Found link: ",imglink)
+
+
+        }
+
+
         val photoRequest = FetchPhotoRequest.builder(photoMetadata)
             .setMaxWidth(500) // Optional.
             .setMaxHeight(300) // Optional.
             .build()
+        Log.i("photo request: ", photoRequest.toString())
         client.fetchPhoto(photoRequest)
             .addOnSuccessListener { it ->
                 fetchedImages.add(it.bitmap)
