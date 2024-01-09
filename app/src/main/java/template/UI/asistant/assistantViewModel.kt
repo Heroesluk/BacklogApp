@@ -14,8 +14,6 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.SearchByTextRequest
-import com.hexascribe.vertexai.VertexAI
-import com.hexascribe.vertexai.domain.VertexResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.HttpClient
@@ -47,25 +45,9 @@ class AssistantViewModel @Inject constructor(
     }
 
     var client = Places.createClient(applicationContext)
-
-
     var townInput by mutableStateOf("")
         private set
-
     val listOfPlaces = mutableListOf<PlaceGenerated>()
-
-
-    val vertexAI by lazy {
-        VertexAI.Builder()
-            .setAccessToken("ya29.a0AfB_byAVAMAsOxPuiM8Bw70yr7B05M--28MOKIOQ4pcFqqlVLxckS6RfqFkmdwwZlNC-ll_1Bvftym8BFRuKZMdBLIJtpv4wnAwdrsIoGm256Z5Nv5tJpIxYChptQmipeyJ4x0LKKNoHiqLf7jy8b015qxe4ckNfnBQCxwaCgYKAekSARESFQHGX2MiN6Wn2_Ycz7Cf4A0fzKrpTA0173")
-            .setProjectId("ageless-webbing-405115")
-            .build()
-    }
-    val textRequest by lazy {
-        vertexAI.textRequest()
-            .setTemperature(0.2)
-            .setMaxTokens(256)
-    }
 
 
     private
@@ -78,8 +60,6 @@ class AssistantViewModel @Inject constructor(
     fun requestPlaceApi() = viewModelScope.launch {
         Log.i("places: ", listOfPlaces.size.toString())
         listOfPlaces.forEach {
-            Log.i("places seen now: ", it.name)
-
             client.searchByText(
                 SearchByTextRequest.newInstance(
                     it.name,
@@ -88,12 +68,8 @@ class AssistantViewModel @Inject constructor(
             ).addOnSuccessListener { resp ->
                 Log.i("places seen: ", resp.places.toString())
                 fetchedPlaces.add(resp.places.get(0))
-                fetchImage(resp.places.get(0))
-                Log.i("Fetched data: ", resp.places.get(0).photoMetadatas!!.toString())
-
-
+                fetchImage(resp.places.get(0), listOfPlaces.indexOf(it))
             }
-
         }
 
 
@@ -101,26 +77,31 @@ class AssistantViewModel @Inject constructor(
 
     fun request() = viewModelScope.launch {
 
-        val prompt =
-            "Im going to ask you to write me down a list of places to visit in specific location - town or city. List of places should be in format: PlaceName - PlaceDescription;PlaceName2 - PlaceDescription2 Don't number the list, Every list entry should start with PlaceName and end with semicolon description should be around 7-20 words. can you suggest me 5 places to visit in Paris"
+            val prompt = """Im going to ask you to write me down a list of places to visit in specific location - town or city. 
+   List of places should be in format: PlaceName - PlaceDescription;PlaceName2 - PlaceDescription2 
+    Don't number the list, Every list entry should start with PlaceName and end with semicolon 
+    description should be around 7-20 words. can you suggest me 5 places to visit in $townInput"""
 
-        val client = HttpClient {
-        }
-        val encodedurl = URLEncoder.encode(prompt, "UTF-8")
-        val response = client.request("https://geminifinal-s3crlxaida-ew.a.run.app/ai/$encodedurl") {
-            method = HttpMethod.Get
-        }
+            val client = HttpClient {
+            }
 
-        Log.i("Response:", response.bodyAsText())
+            val encodedurl = URLEncoder.encode(prompt, "UTF-8")
+
+            Log.i("Promt:", encodedurl)
+            val response = client.request("https://geminifinal-s3crlxaida-ew.a.run.app/ai/$encodedurl") {
+                method = HttpMethod.Get
+            }
+
+            handleTextResult(response.bodyAsText())
+            requestPlaceApi()
 
 
-        handleTextResult(response.bodyAsText())
-        requestPlaceApi()
+
 
 
     }
 
-    private fun fetchImage(place: Place) {
+    private fun fetchImage(place: Place, index: Int) {
         val metada = place.photoMetadatas
         if (metada == null || metada.isEmpty()) {
             Log.w("TAG", "No photo metadata.")
@@ -137,8 +118,6 @@ class AssistantViewModel @Inject constructor(
             val imglink =
                 "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&sensor=false&key=$api"
             Log.i("Found link: ", imglink)
-
-
         }
 
 
@@ -174,6 +153,7 @@ class AssistantViewModel @Inject constructor(
             for (place in places) {
                 var lr = place.split(" - ")
                 listOfPlaces.add(PlaceGenerated(lr.get(0), lr.get(1)))
+
             }
 
             Log.i("1", listOfPlaces.toString())
