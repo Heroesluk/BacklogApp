@@ -18,6 +18,8 @@ import coil.compose.AsyncImage
 import android.net.Uri
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import java.io.File
 
 
@@ -46,7 +48,18 @@ fun addPhotoToImage(
                 )
             },
         ) {
-            Text(text = "Pick one photo")
+            Text(text = "Pick photo from gallery")
         }
+
+        Button(
+            onClick = {
+                singlePhotoPickerLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                )
+            },
+        ) {
+            Text(text = "Or fetch from internet")
+        }
+
     }
 }

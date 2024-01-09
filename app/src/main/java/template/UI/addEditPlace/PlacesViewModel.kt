@@ -1,5 +1,7 @@
 package template.UI.addEditPlace
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -10,7 +12,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.SearchByTextRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -23,8 +29,52 @@ import javax.inject.Inject
 class PlacesViewModel @Inject constructor(
     private val placeUseCases: PlaceUseCases,
     savedStateHandle: SavedStateHandle,
+    @ApplicationContext applicationContext: Context,
 
     ) : ViewModel() {
+
+    init {
+        Places.initialize(applicationContext, "AIzaSyAiCWPf_5MTU2VzfVF1PrABKoZ53rZw-88")
+
+    }
+
+    var client = Places.createClient(applicationContext)
+
+    val img = mutableStateOf<Bitmap?>(null)
+
+
+    fun requestPlaceApi() = viewModelScope.launch {
+        client.searchByText(
+            SearchByTextRequest.newInstance(
+                name,
+                listOf(
+                    com.google.android.libraries.places.api.model.Place.Field.PHOTO_METADATAS,
+                ),
+            ),
+        ).addOnSuccessListener { resp ->
+            fetchImage(resp.places.get(0))
+            Log.i("Fetched data: ", resp.places.get(0).photoMetadatas!!.toString())
+        }
+    }
+
+    private fun fetchImage(place: com.google.android.libraries.places.api.model.Place) {
+        val metada = place.photoMetadatas
+        if (metada == null || metada.isEmpty()) {
+            Log.w("TAG", "No photo metadata.")
+        }
+        val photoMetadata = metada.first()
+
+        val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+            .setMaxWidth(500) // Optional.
+            .setMaxHeight(300) // Optional.
+            .build()
+        client.fetchPhoto(photoRequest)
+            .addOnSuccessListener { it ->
+                img.value = it.bitmap
+            }.addOnFailureListener { exception: Exception ->
+                Log.i("Error", exception.toString())
+            }
+    }
 
 
     var mode by mutableStateOf("Add place")

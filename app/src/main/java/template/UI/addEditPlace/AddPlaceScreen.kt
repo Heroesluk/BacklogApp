@@ -1,8 +1,10 @@
 package template.UI.addEditPlace
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,7 +57,7 @@ fun AddPlaceScreen(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(16.dp, 16.dp,16.dp,16.dp)
+            .padding(16.dp, 16.dp, 16.dp, 16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -130,8 +133,6 @@ fun AddPlaceScreen(
             isError = !viewModel.descriptionCorrect,
         )
         Spacer(modifier = Modifier.padding(2.dp))
-
-
         Button(
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,7 +150,18 @@ fun AddPlaceScreen(
             )
         }
 
-        addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it) })
+        Button(onClick = { viewModel.requestPlaceApi() }) {
+            Text(text = "Click this")
+        }
+
+        if (viewModel.img.value != null) {
+            Image(
+                bitmap = viewModel.img.value!!.asImageBitmap(),
+                contentDescription = "some useful description",
+            )
+        }
+
+//        addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it) })
 
     }
 }

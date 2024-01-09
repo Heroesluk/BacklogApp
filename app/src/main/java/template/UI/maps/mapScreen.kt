@@ -59,7 +59,7 @@ fun mapScreen(
 
     ) {
 
-    val cameraPos = LatLng(1.35, 103.87)
+    val cameraPos = LatLng( 51.759445, 19.457216)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(cameraPos, 10f)
     }

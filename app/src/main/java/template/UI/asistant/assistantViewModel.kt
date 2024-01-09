@@ -56,16 +56,18 @@ class AssistantViewModel @Inject constructor(
     var townInput by mutableStateOf("")
         private set
 
+    val listOfPlaces = mutableListOf<PlaceGenerated>()
+
 
     val vertexAI by lazy {
         VertexAI.Builder()
-            .setAccessToken("ya29.a0AfB_byBnKjVRyyCUNjgsHgQlE4yN9V17yW-SaJcegwlCQpbkQfM4hNuLHFyBVkdKdbcDXQX_RqlaqXbPUXy0FzovCJJInfU8vA_mbeqg--izmO4pMK1zCG5iK8d9o8zAQHxkbM0E3jfxVhjCpzPuHJpYo7wE1pglyIbATwaCgYKAdoSARESFQHGX2Mi0P5htl1ySewCLQ6hiJXf5w0173")
+            .setAccessToken("ya29.a0AfB_byC0IlFarkZlxCDSp8bScQq1BUotSMND3RNKOgmA6opOK6IRpNRaemYRIL602YPoLk4UvV-VBebJDNnvMNBXrkxaS4UYRqZ-5rKMv90RdYEwHkFTE0mRr-TMT2ybGwQrqa0MFFxSB2ZfkRzZPL96sTGbwAdqGAKzRAaCgYKAYMSARESFQHGX2Mi3v-PvduVhWAAYtqLEd_9ZA0173")
             .setProjectId("ageless-webbing-405115")
             .build()
     }
     val textRequest by lazy {
         vertexAI.textRequest()
-            .setTemperature(0.8)
+            .setTemperature(0.2)
             .setMaxTokens(256)
     }
 
@@ -76,27 +78,45 @@ class AssistantViewModel @Inject constructor(
 
     var fetchedPlaces = mutableStateListOf<Place>()
     var fetchedImages = mutableStateListOf<Bitmap>()
-    fun request() = viewModelScope.launch {
-        var job = false
 
-        val response = client.searchByText(
-            SearchByTextRequest.newInstance(
-                "Eiffel tower",
-                listOf(Place.Field.NAME, Place.Field.ID, Place.Field.ICON_URL, Place.Field.ADDRESS, Place.Field.PHOTO_METADATAS),
-            ),
-        ).addOnSuccessListener {
-            fetchedPlaces.add(it.places.get(0))
-            fetchImage(it.places.get(0))
-            Log.i("Fetched data: ", it.places.get(0).photoMetadatas!!.toString())
+    fun requestPlaceApi() = viewModelScope.launch {
+        Log.i("places: ", listOfPlaces.size.toString())
+        listOfPlaces.forEach {
+            Log.i("places seen now: ", it.name)
+
+            client.searchByText(
+                SearchByTextRequest.newInstance(
+                    it.name,
+                    listOf(Place.Field.NAME, Place.Field.ID, Place.Field.ICON_URL, Place.Field.ADDRESS, Place.Field.PHOTO_METADATAS),
+                ),
+            ).addOnSuccessListener { resp ->
+                Log.i("places seen: ", resp.places.toString())
+                fetchedPlaces.add(resp.places.get(0))
+                fetchImage(resp.places.get(0))
+                Log.i("Fetched data: ", resp.places.get(0).photoMetadatas!!.toString())
+            }
+
         }
 
+
+    }
+
+    fun request() = viewModelScope.launch {
+
         val prompt =
-            """I'm going to ask you to write me down a list of places to visit in specific location - town or city. Your response should be formatted in a way:
-    PlaceName - PlaceDescription end with semicolon, dont use asterix
+            """I'm going to ask you to write me down a list of places to visit in specific location - town or city. Example of how response could look like:
+                Berlin Wall - A very big place around berlin destroyed in 1999;
+                Reichstag Building - Houses the German parliament and offers stunning city views;
+                Charlottenburg Palace - description=Baroque-style palace with beautiful gardens
+                please respond in same message format, but with completely different places    
     description should be around 7-20 words. 
-    can you suggest me 5 places to visit in $townInput"""
+    can you suggest me 3 places to visit in $townInput"""
         val result = textRequest.execute(prompt)
         handleTextResult(result)
+
+        requestPlaceApi()
+
+
     }
 
     private fun fetchImage(place: Place) {
@@ -129,12 +149,18 @@ class AssistantViewModel @Inject constructor(
     private fun handleTextResult(result: VertexResult<String>) {
         result
             .onSuccess {
+                listOfPlaces.clear()
+
+                fetchedPlaces.clear()
+                fetchedImages.clear()
+
+
                 _output.value = it
                 try {
-                    val places = it.split(";");
-                    val listOfPlaces = mutableListOf<PlaceGenerated>()
+                    val places = it.split(".");
                     for (place in places) {
-                        var lr = place.split(" - ")
+                        var pl = place.filterNot { it == '*' }
+                        var lr = pl.split(" - ")
                         listOfPlaces.add(PlaceGenerated(lr.get(0), lr.get(1)))
                     }
 

@@ -68,13 +68,13 @@ fun aiAssistantScreen(
                 },
             )
             Button(onClick = { viewModel.request() }) {
-                Text(text = "click me")
+                Text(text = "Submit")
             }
-            Text(text = output, style = MaterialTheme.typography.bodySmall)
-
 
             LazyColumn(
             ) {
+
+
                 items(viewModel.fetchedPlaces){
                     Row(){
                         Text(text= it.name!!)
