@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,26 +14,15 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.SearchByTextRequest
-import dagger.hilt.android.lifecycle.HiltViewModel
-import template.domain.usecase.PlaceUseCases
-import javax.inject.Inject
 import com.hexascribe.vertexai.VertexAI
 import com.hexascribe.vertexai.domain.VertexResult
-import io.ktor.client.HttpClient
-import io.ktor.client.request.header
-import io.ktor.client.request.request
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
-import io.ktor.http.contentType
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import com.google.gson.JsonSerializer
-import dagger.hilt.android.qualifiers.ApplicationContext
+import template.domain.usecase.PlaceUseCases
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -130,8 +118,6 @@ class AssistantViewModel @Inject constructor(
         }
         val photoMetadata = metada.first()
 
-        val attributions = photoMetadata?.attributions
-        var foto = null
 
         var data =photoMetadata.toString().split(",").toString()
         val regex = Regex("photoReference=([^,]+)")

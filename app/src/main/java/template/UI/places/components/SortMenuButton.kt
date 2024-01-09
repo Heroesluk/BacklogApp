@@ -13,8 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import template.domain.util.SortBy
-import template.domain.util.SortDirection
-import template.util.FilterSort
 
 @Composable
 fun sortMenuButton(

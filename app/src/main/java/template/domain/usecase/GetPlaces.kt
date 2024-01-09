@@ -1,7 +1,6 @@
 package template.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import template.domain.model.Place
 import template.domain.repository.PlaceRepository
