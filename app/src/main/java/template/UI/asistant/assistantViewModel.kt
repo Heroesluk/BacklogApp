@@ -18,10 +18,15 @@ import com.hexascribe.vertexai.VertexAI
 import com.hexascribe.vertexai.domain.VertexResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.ktor.client.HttpClient
+import io.ktor.client.request.request
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpMethod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import template.domain.usecase.PlaceUseCases
+import java.net.URLEncoder
 import javax.inject.Inject
 
 
@@ -34,9 +39,10 @@ class AssistantViewModel @Inject constructor(
     ) : ViewModel() {
 
 
-        val api = "AIzaSyAiCWPf_5MTU2VzfVF1PrABKoZ53rZw-88"
+    val api = "AIzaSyAiCWPf_5MTU2VzfVF1PrABKoZ53rZw-88"
+
     init {
-            Places.initialize(applicationContext, api)
+        Places.initialize(applicationContext, api)
 
     }
 
@@ -96,16 +102,19 @@ class AssistantViewModel @Inject constructor(
     fun request() = viewModelScope.launch {
 
         val prompt =
-            """I'm going to ask you to write me down a list of places to visit in specific location - town or city. Example of how response could look like:
-                Berlin Wall - A very big place around berlin destroyed in 1999;
-                Reichstag Building - Houses the German parliament and offers stunning city views;
-                Charlottenburg Palace - description=Baroque-style palace with beautiful gardens
-                please respond in same message format, but with completely different places    
-    description should be around 7-20 words. 
-    can you suggest me 3 places to visit in $townInput"""
-        val result = textRequest.execute(prompt)
-        handleTextResult(result)
+            "Im going to ask you to write me down a list of places to visit in specific location - town or city. List of places should be in format: PlaceName - PlaceDescription;PlaceName2 - PlaceDescription2 Don't number the list, Every list entry should start with PlaceName and end with semicolon description should be around 7-20 words. can you suggest me 5 places to visit in Paris"
 
+        val client = HttpClient {
+        }
+        val encodedurl = URLEncoder.encode(prompt, "UTF-8")
+        val response = client.request("https://geminifinal-s3crlxaida-ew.a.run.app/ai/$encodedurl") {
+            method = HttpMethod.Get
+        }
+
+        Log.i("Response:", response.bodyAsText())
+
+
+        handleTextResult(response.bodyAsText())
         requestPlaceApi()
 
 
@@ -119,14 +128,15 @@ class AssistantViewModel @Inject constructor(
         val photoMetadata = metada.first()
 
 
-        var data =photoMetadata.toString().split(",").toString()
+        var data = photoMetadata.toString().split(",").toString()
         val regex = Regex("photoReference=([^,]+)")
         val matchResult = regex.find(data)
 
         if (matchResult != null) {
             val photoReference = matchResult.groupValues[1]
-            val imglink = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&sensor=false&key=$api"
-            Log.i("Found link: ",imglink)
+            val imglink =
+                "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoReference&sensor=false&key=$api"
+            Log.i("Found link: ", imglink)
 
 
         }
@@ -151,36 +161,26 @@ class AssistantViewModel @Inject constructor(
     }
 
 
-    private fun handleTextResult(result: VertexResult<String>) {
-        result
-            .onSuccess {
-                listOfPlaces.clear()
+    private fun handleTextResult(result: String) {
+        listOfPlaces.clear()
 
-                fetchedPlaces.clear()
-                fetchedImages.clear()
+        fetchedPlaces.clear()
+        fetchedImages.clear()
 
 
-                _output.value = it
-                try {
-                    val places = it.split(".");
-                    for (place in places) {
-                        var pl = place.filterNot { it == '*' }
-                        var lr = pl.split(" - ")
-                        listOfPlaces.add(PlaceGenerated(lr.get(0), lr.get(1)))
-                    }
-
-                    Log.i("1", listOfPlaces.toString())
-
-                } catch (exception: Exception) {
-                    Log.i("parsingError", "Couldn't parse response: $it")
-                }
-
-                Log.i("Text Result Success:", it)
+        _output.value = result
+        try {
+            val places = result.split(";");
+            for (place in places) {
+                var lr = place.split(" - ")
+                listOfPlaces.add(PlaceGenerated(lr.get(0), lr.get(1)))
             }
-            .onFailure {
-                Log.i("Text Result Failure: ", it.message.toString())
-            }
+
+            Log.i("1", listOfPlaces.toString())
+
+        } catch (exception: Exception) {
+            Log.i("parsingError", "Couldn't parse response: $result")
+        }
     }
-
 
 }
