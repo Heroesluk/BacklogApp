@@ -41,6 +41,7 @@ class PlacesViewModel @Inject constructor(
     var client = Places.createClient(applicationContext)
 
     val img = mutableStateOf<Bitmap?>(null)
+    var imgIndex = 0
 
 
     fun requestPlaceApi() = viewModelScope.launch {
@@ -61,19 +62,28 @@ class PlacesViewModel @Inject constructor(
         val metada = place.photoMetadatas
         if (metada == null || metada.isEmpty()) {
             Log.w("TAG", "No photo metadata.")
-        }
-        val photoMetadata = metada.first()
+        } else {
 
-        val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-            .setMaxWidth(500) // Optional.
-            .setMaxHeight(300) // Optional.
-            .build()
-        client.fetchPhoto(photoRequest)
-            .addOnSuccessListener { it ->
-                img.value = it.bitmap
-            }.addOnFailureListener { exception: Exception ->
-                Log.i("Error", exception.toString())
+            if (imgIndex > metada.size) {
+                imgIndex = 0
             }
+
+            val photoMetadata = metada.get(imgIndex)
+
+            val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .setMaxWidth(300) // Optional.
+                .setMaxHeight(300) // Optional.
+                .build()
+            client.fetchPhoto(photoRequest)
+                .addOnSuccessListener { it ->
+                    img.value = it.bitmap
+                }.addOnFailureListener { exception: Exception ->
+                    Log.i("Error", exception.toString())
+                }
+        }
+
+        imgIndex+=1
+
     }
 
 

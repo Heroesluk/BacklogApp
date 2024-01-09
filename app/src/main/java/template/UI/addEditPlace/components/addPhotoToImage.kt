@@ -38,28 +38,17 @@ fun addPhotoToImage(
         },
     )
 
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
+
+    Button(
+        onClick = {
+            singlePhotoPickerLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+            )
+        },
     ) {
-        Button(
-            onClick = {
-                singlePhotoPickerLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-                )
-            },
-        ) {
-            Text(text = "Pick photo from gallery")
-        }
-
-        Button(
-            onClick = {
-                singlePhotoPickerLauncher.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
-                )
-            },
-        ) {
-            Text(text = "Or fetch from internet")
-        }
-
+        Text(text = "Pick photo from gallery")
     }
+
+
+
 }

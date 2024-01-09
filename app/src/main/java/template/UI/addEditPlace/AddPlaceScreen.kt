@@ -69,15 +69,23 @@ fun AddPlaceScreen(
         )
 
         Text(text = "LocationId: " + viewModel.locationLat.toString() + ":" + viewModel.locationLong.toString())
-
-        if (viewModel.selectedImageUri != null) {
-            Box(Modifier.height(100.dp)) {
-                AsyncImage(
-                    model = viewModel.selectedImageUri,
-                    contentDescription = null,
-                )
-            }
+        Box(Modifier.height(100.dp)) {
+            AsyncImage(
+                model = { viewModel.selectedImageUri },
+                contentDescription = null,
+            )
         }
+
+//        if (viewModel.selectedImageUri != null) {
+//            viewModel.img.value = null;
+//
+//        } else if (viewModel.img.value != null) {
+//            Image(
+//                bitmap = viewModel.img.value!!.asImageBitmap(),
+//                contentDescription = "some useful description",
+//            )
+//        }
+
 
         Spacer(modifier = Modifier.padding(2.dp))
 
@@ -150,18 +158,15 @@ fun AddPlaceScreen(
             )
         }
 
-        Button(onClick = { viewModel.requestPlaceApi() }) {
-            Text(text = "Click this")
+        Row(horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()) {
+
+//            Button(onClick = { viewModel.requestPlaceApi() }) {
+//                Text(text = "Add photo from internet")
+//            }
+            addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it) })
         }
 
-        if (viewModel.img.value != null) {
-            Image(
-                bitmap = viewModel.img.value!!.asImageBitmap(),
-                contentDescription = "some useful description",
-            )
-        }
-
-//        addPhotoToImage(saveImage = { viewModel.onPhotoUriChange(it) })
 
     }
 }
